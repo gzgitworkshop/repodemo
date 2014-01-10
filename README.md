@@ -1,0 +1,4 @@
+video-player
+============
+
+resource application
