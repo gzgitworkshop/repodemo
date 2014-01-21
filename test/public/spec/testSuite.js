@@ -3,7 +3,13 @@ define( function () {
 
 	/* return an array of specs to be run */
 	return {
-		'specs' : [ 'spec/controllers/AppControllerTest'
+		'specs' : [ 'spec/collections/videos/VideosCollectionTest.js', 
+		'spec/controllers/AppControllerTest.js', 
+		'spec/models/videos/VideoModelTest.js', 
+		'spec/views/videos/VideoItemViewTest.js', 
+		'spec/views/videos/VideosCollectionTest.js', 
+		'spec/views/videos/VideosLayoutTest.js', 
+		'spec/views/videos/VideosListViewTest.js'
 		 ]
 	};
 } );

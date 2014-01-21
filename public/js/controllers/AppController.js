@@ -1,18 +1,27 @@
-// ## Manages f/e logic for the application
 define( function ( require ) {
 	'use strict';
 
 	var _           = require( 'underscore' );
+	var $           = require( 'jquery' );
 	var Backbone    = require( 'backbone' );
 	var Marionette  = require( 'marionette' );
+	var async       = require( 'async' );
 
 	var applications = {};
-	var collections  = {};
+	var collections  = {
+		'VideosCollection' : require( 'collections/videos/VideosCollection' )
+	};
 	var components   = {};
-	var layouts      = {};
-	var models       = {};
+	var layouts      = {
+		'VideosLayout' : require( 'views/videos/VideosLayout' )
+	};
+	var models       = {
+		'VideoModel' : require( 'models/videos/VideoModel' )
+	};
 	var views        = {
-		'ErrorView' : require( 'views/ErrorView' )
+		'VideosListView' : require( 'views/videos/VideosListView' ),
+		'VideoItemView'  : require( 'views/videos/VideoItemView' ),
+		'ErrorView'      : require( 'views/ErrorView' )
 	};
 
 	return Marionette.Controller.extend( {
@@ -25,6 +34,12 @@ define( function ( require ) {
 		},
 
 		'showDefault' : function ( actions ) {
+			var layout = this._setContent( layouts.VideosLayout );
+
+			new collections.VideosCollection().fetch( { 'success' : function(collection) {
+				var videosView = new views.VideosListView( { 'collection' : collection } );
+				layout.videos.show( videosView );
+			}.bind( this ) } );
 		},
 
 
