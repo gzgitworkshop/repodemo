@@ -1,27 +1,149 @@
 <!DOCTYPE html>
-	<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-	<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-	<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
-	<head>
-		<meta charset="utf-8">
-		<title>mema</title>
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en">
+<!--<![endif]-->
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="utf-8">
+    <title>mema</title>
 
-		<link href="/public/css/styles.min.css" rel="stylesheet" type="text/css">
-		<!--[if lt IE 9]>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/public/css/styles.min.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<script src="js/libs/json2.js"></script>
 		<![endif]-->
-	</head>
+    <style type="text/css">
+    body {
+        font-family:'Avenir LT W01 65 Medium', 'AvenirLTW01-65MediumObl', 'Avenir LT W01 85 Heavy', 'AvenirLTW01-85HeavyObli', 'Avenir', 'helvetica neue', helvetica, arial, sans-serif;
+        font-size: 15px;
+    }
+    body {
+        color: #4B505C;
+    }
+    .wide-container {
+        margin: 0 auto;
+        max-width: 1200px;
+    }
+    .resource-list-heading {
+        height: 30px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    .resources h2 {
+        float: left;
+    }
+    h2 {
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 30px;
+    }
+    h1, h2, h3 {
+        font-family:'Avenir LT W01 65 Medium', 'AvenirLTW01-65MediumObl', 'Avenir LT W01 85 Heavy', 'AvenirLTW01-85HeavyObli', 'Avenir', 'helvetica neue', helvetica, arial, sans-serif;
+        font-weight: 300;
+        margin: 0;
+        padding: 0;
+    }
+    .view-more {
+        float: right;
+    }
+    a {
+        color: #3DADEF;
+        text-decoration: none;
+    }
+    .resources ul {
+        margin-bottom: 50px;
+        min-height: 300px;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    li.grid-box {
+        box-shadow: 0 1px 1px rgba(32, 37, 35, 0.2);
+    }
+    .login-form input, li.grid-box, .blue-btn, .green-btn {
+        border-radius: 3px;
+    }
+    li.grid-box {
+        background: none repeat scroll 0 0 #F3F5F6;
+        float: left;
+        margin: 0 32px 32px 0;
+        width: 276px;
+    }
+    .vid-thumb {
+        height: 276px;
+        position: relative;
+    }
+    .play-now {
+        display: none;
+        left: 57px;
+        position: absolute;
+        top: 73px;
+        z-index: 1000;
+    }
+    a {
+        color: #3DADEF;
+        text-decoration: none;
+    }
+    .watch-later {
+        display: none;
+        position: absolute;
+        right: 57px;
+        top: 70px;
+        z-index: 1000;
+    }
+    a {
+        color: #3DADEF;
+        text-decoration: none;
+    }
+    .vid-thumb-bg {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+    .vid-thumb-bg {
+        background: none repeat scroll 0 0 #000000;
+        height: 180px;
+        overflow: hidden;
+        width: 276px;
+    }
+    .vid-thumb h3 {
+        margin: 20px 0 0 25px;
+    }
+    h3 {
+        font-size: 18px;
+        font-weight: 300;
+        line-height: 24px;
+    }
+    h1, h2, h3 {
+        font-family:'Avenir LT W01 65 Medium', 'AvenirLTW01-65MediumObl', 'Avenir LT W01 85 Heavy', 'AvenirLTW01-85HeavyObli', 'Avenir', 'helvetica neue', helvetica, arial, sans-serif;
+        font-weight: 300;
+        margin: 0;
+        padding: 0;
+    }
+    .vid-thumb p {
+        color: #8A8D94;
+        margin: 5px 0 0 25px;
+    }
+    p {
+        font-size: 15px;
+        font-weight: normal;
+        line-height: 28px;
+    }
+    </style>
+</head>
 
-	<body>
-		<div id="main-content" class="container"></div>
+<body>
+    <div id="main-content" class="container"></div>
 
-		<script src="js/libs/es5-shim/es5-shim.min.js"></script>
-		<script src="js/libs/respond/respond.min.js"></script>
-		<script src="js/libs/requirejs/require.min.js" data-main="js/main.min.js"></script>
-		<script src="js/require-config.js"></script>
+    <script src="js/libs/es5-shim/es5-shim.min.js"></script>
+    <script src="js/libs/respond/respond.min.js"></script>
+    <script src="js/libs/requirejs/require.min.js" data-main="js/main.min.js"></script>
+    <script src="js/require-config.js"></script>
+</body>
 
-	</body>
 </html>

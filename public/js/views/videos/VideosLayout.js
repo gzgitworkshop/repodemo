@@ -1,19 +1,18 @@
-define( function ( require ) {
-	'use strict';
+define(function(require) {
+    'use strict';
 
-	var Marionette = require( 'marionette' );
-	var _          = require( 'underscore' );
-	var template   = require( 'text!templates/videos/videosLayout.html' );
+    var Marionette = require('marionette');
+    var _ = require('underscore');
+    var template = require('text!templates/videos/videosLayout.html');
 
-	return Marionette.Layout.extend( {
+    return Marionette.Layout.extend({
 
-		'initialize' : function ( options ) {
-		},
+        'initialize': function(options) {},
 
-		'template' : _.template( template ),
-		'regions'  : {
-			'videos' : '#videos'
-		}
-	} );
+        'template': _.template(template),
+        'regions': {
+            'videos': '#videos'
+        }
+    });
 
-} );
+});

@@ -8,9 +8,7 @@ define( function ( require ) {
 
 		'tagName'   : 'ul',
 
-		'itemView'  : VideoItemView,
-
-		'className' : 'inline'
+		'itemView'  : VideoItemView
 
 	} );
 

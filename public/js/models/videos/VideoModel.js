@@ -10,8 +10,7 @@ define( function ( require ) {
 
 		'defaults' : {},
 		
-		'idAttribute' : '_id',
-		'urlRoot'     : '/users'
+		'idAttribute' : '_id'
 
     } );
 } );

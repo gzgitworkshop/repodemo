@@ -15,14 +15,12 @@ define( function ( require ) {
 	var layouts      = {
 		'VideosLayout' : require( 'views/videos/VideosLayout' )
 	};
-	var models       = {
-		'VideoModel' : require( 'models/videos/VideoModel' )
-	};
 	var views        = {
 		'VideosListView' : require( 'views/videos/VideosListView' ),
 		'VideoItemView'  : require( 'views/videos/VideoItemView' ),
 		'ErrorView'      : require( 'views/ErrorView' )
 	};
+	var util = require('utilities/videos/Recommend');
 
 	return Marionette.Controller.extend( {
 
@@ -36,10 +34,11 @@ define( function ( require ) {
 		'showDefault' : function ( actions ) {
 			var layout = this._setContent( layouts.VideosLayout );
 
-			new collections.VideosCollection().fetch( { 'success' : function(collection) {
+			util(function(data){
+				var collection = new collections.VideosCollection(data)
 				var videosView = new views.VideosListView( { 'collection' : collection } );
 				layout.videos.show( videosView );
-			}.bind( this ) } );
+			});
 		},
 
 

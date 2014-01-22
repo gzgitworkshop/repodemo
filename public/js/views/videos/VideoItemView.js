@@ -15,8 +15,21 @@ define( function ( require ) {
 		'events'   : {},
 		
 		'tagName'  : 'li',
+		'id' 	   : '5',
+		'className': 'grid-box vid-thumb',
 
-		'onRender' : function () {}
+		templateHelpers: function(){
+			var model = this.model.attributes
+			return {
+				imageUrl : model.imageUrl,
+				topic : model.topic,
+				duration : model.duration
+			}
+		},
+
+		'onRender' : function () {
+			$("#allCount").html(($("#allCount").html() * 1) + 1 )
+		}
 	} );
 
 } );

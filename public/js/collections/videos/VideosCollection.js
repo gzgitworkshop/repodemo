@@ -8,9 +8,9 @@ define( function ( require ) {
 		'initialize' : function ( models, options ) {
 		},
 
-		'model' : Videomodel,
+		'model' : Videomodel//,
 
-		'url'   : '/users'
+		//'url'   : '/users'
 		
 	} );
 } );
