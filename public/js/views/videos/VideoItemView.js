@@ -13,7 +13,7 @@ define( function ( require ) {
 		'template' : _.template( template ),
 		'ui'       : {},
 		'events'   : {},
-		
+
 		'tagName'  : 'li',
 		'id' 	   : '5',
 		'className': 'grid-box vid-thumb',
