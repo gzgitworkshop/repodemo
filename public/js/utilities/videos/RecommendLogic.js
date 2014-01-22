@@ -1,3 +1,11 @@
+/**
+    Recommendation Logic
+    Author : Joseph Panuncillo
+    Last Date Modified : 1/22/14
+
+    @Description  Prototype for Recommendation Logic
+
+*/
 define(function (require) {
     'use strict';
 
@@ -23,5 +31,5 @@ define(function (require) {
         }
     };
 
-    return new RECOMMENDATION_LOGIC("Executing Filter!");
+    return new RECOMMENDATION_LOGIC('Executing Filter!');
 });

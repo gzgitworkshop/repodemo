@@ -1,3 +1,10 @@
+/**
+    Recommendation System
+    Author : Joseph Panuncillo
+    Last Date Modified : 1/22/14
+
+    @Description  Prototype for Recommendation System
+*/
 define(function (require) {
     'use strict';
 
@@ -51,16 +58,16 @@ define(function (require) {
         execute: function () {
             var videoData = this.videoData;
             var filterData = this.filterData;
-            logger("original = " + JSON.stringify(videoData));
+            logger(videoData);
 
             async.forEach(this.recommendationLogicCollection, function (obj, callback) {
                 logger(obj.executeMessage);
                 obj.filter(videoData, filterData, function (outputVideoData) {
                     videoData = outputVideoData;
                 });
-                logger("output = " + JSON.stringify(videoData));
+                logger(JSON.stringify(videoData));
             }, function (err) {
-                logger("final = " + JSON.stringify(videoData));
+                logger(videoData);
             });
 
             return videoData;

@@ -1,3 +1,10 @@
+/**
+    Filter Data
+    Author : Joseph Panuncillo
+    Last Date Modified : 1/22/14
+
+    @Description  Prototype for Filter Data
+*/
 define(function (require) {
     'use strict';
 

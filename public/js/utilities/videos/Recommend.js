@@ -1,3 +1,10 @@
+/**
+    Recommendation Architecture
+    Author : Joseph Panuncillo
+    Last Date Modified : 1/22/14
+
+    @Description  Implementation of Recommendation Architecture
+*/
 define(function (require) {
     'use strict';
 
@@ -10,7 +17,7 @@ define(function (require) {
 
     recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/sampleFilter'));
     require('utilities/videos/data/sampleFilterData')(function (newFilterdata) {
-        filterData.regFilterDataObject("first", newFilterdata);
+        filterData.regFilterDataObject('first', newFilterdata);
     });
 
     /**
