@@ -27,7 +27,7 @@ define(function (require) {
      */
     /** Object that provides methods for adding new filter data */
     var FILTER_DATA = function () {
-        this.filterDataCollection = [];
+        this.filterDataCollection = {};
     };
     FILTER_DATA.prototype = {
         /**
@@ -36,7 +36,8 @@ define(function (require) {
          * @param  function newFilterDataObject object that returns the new filter data
          */
         regFilterDataObject: function (key, newFilterDataObject) {
-            this.filterDataCollection.push(objectMaker(key, newFilterDataObject));
+            //this.filterDataCollection.push(objectMaker(key, newFilterDataObject));
+            this.filterDataCollection[key] = newFilterDataObject;
         },
         getFilterData: function () {
             return this.filterDataCollection;
