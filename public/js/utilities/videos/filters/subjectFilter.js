@@ -6,22 +6,22 @@ define(function (require) {
 
     function logger(sMsg) {
       console.log(sMsg);
-    };
+    }
 
-    subjectFilter.setExecuteMessage("Executing Subject Filter");
+    subjectFilter.setExecuteMessage('Executing Subject Filter');
 
     subjectFilter.filter = function (videoData, filterData, callback) {
+      
+      var arFilterSubj = filterData['UserData'].subject;
 
-logger(filterData);
-      var arFilterSubj = filterData[0].UserData.subject;
       utility.filter(videoData, arFilterSubj, function( err, arResults ) {
 
         if(err) {
-          logger("Err: " + err);
+          logger('Err: ' + err);
           return callback(err);
         }
 
-        logger("Fetched filtered data");
+        logger('Fetched filtered data');
         
         //change videoData.raw reference to arHandler
         videoData.raw = null;
@@ -29,7 +29,7 @@ logger(filterData);
         callback(videoData);
 
       });
-    
+
     };
 
     return subjectFilter;
