@@ -63,7 +63,7 @@ define(function (require) {
 					}
 
 				} , function (err) {
-					logger("final = " + JSON.stringfy(videoData));
+					logger(videoData);
 				});
 				
 				arVideoRaw = null;
@@ -71,7 +71,7 @@ define(function (require) {
 
 
 			} , function (err) {
-				logger("final = " + JSON.stringfy(videoData));
+				logger(videoData);
 			});
 			
 			if(!arFilterHandler.length) {
