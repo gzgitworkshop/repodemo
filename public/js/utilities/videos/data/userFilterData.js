@@ -5,7 +5,7 @@ define(function (require) {
 
     return function (callback) {
         callback( { subject : [ 'Vocational' ], 
-        		 	gradelevel: [ 'grade-1, grade-3' ] 
+        		 	gradelevel: [ 'grade-1', 'grade-3' ] 
         		 } );
     };
 });
