@@ -8,7 +8,8 @@ define( function () {
 		'spec/models/videos/VideoModelTest.js', 
 		'spec/views/videos/VideoItemViewTest.js',  
 		'spec/views/videos/VideosLayoutTest.js', 
-		'spec/views/videos/VideosListViewTest.js'
+		'spec/views/videos/VideosListViewTest.js',
+		'spec/utilities/videos/RecommendTest.js'
 		 ]
 	};
 } );

@@ -19636,6 +19636,7 @@ define('utilities/videos/RecommendationSystem',['require','https://raw2.github.c
 
     function logger(message) {
         //alert(message);
+        console.log(message);
     }
 
     /** Object that provides methods for adding new filter logic */
@@ -19684,7 +19685,7 @@ define('utilities/videos/RecommendationSystem',['require','https://raw2.github.c
                 obj.filter(videoData, filterData, function (outputVideoData) {
                     videoData = outputVideoData;
                 });
-                logger(JSON.stringify(videoData));
+                logger(videoData);
             }, function (err) {
                 logger(videoData);
             });
@@ -19707,49 +19708,49 @@ define('utilities/videos/data/videoInfoSource',['require','models/videos/VideoMo
         imageUrl: 'img/video-bg-2.png',
         topic: 'Closing the Gap',
         duration: '9 min',
-        tags: []
+        tags: ['grade-1', 'English', 'Technology', 'grade-2']
     }), new models.VideoModel({
         _id: 2,
         imageUrl: 'img/video-bg-3.png',
         topic: 'Culture',
         duration: '3 min',
-        tags: []
+        tags: ['Social Studies', 'grade-2']
     }), new models.VideoModel({
         _id: 3,
         imageUrl: 'img/video-bg-4.png',
         topic: 'Phones in Class',
         duration: '4 min',
-        tags: []
+        tags: ['Technology', 'Vocational', 'grade-6']
     }), new models.VideoModel({
         _id: 4,
         imageUrl: 'img/video-bg-5.png',
         topic: 'Time Management',
         duration: '7 min',
-        tags: []
+        tags: ['grade-5', 'Business']
     }), new models.VideoModel({
         _id: 5,
         imageUrl: 'img/video-bg-6.png',
         topic: 'Tech Basics',
         duration: '4 min',
-        tags: []
+        tags: ['Technology','grade-6']
     }), new models.VideoModel({
         _id: 6,
         imageUrl: 'img/video-bg-7.png',
         topic: 'Learning Games',
         duration: '9 min',
-        tags: []
+        tags: ['Technology','grade-1']
     }), new models.VideoModel({
         _id: 7,
         imageUrl: 'img/video-bg-8.png',
         topic: 'Communication',
         duration: '5 min',
-        tags: []
+        tags: ['English', 'grade-1','grade-2', 'grade-3', 'grade-4', 'grade-5', 'grade-6']
     }), new models.VideoModel({
         _id: 8,
         imageUrl: 'img/video-bg-9.png',
         topic: 'Teaching and the Internet',
         duration: '11 min',
-        tags: []
+        tags: ['Technology','grade-6']
     })];
 });
 /**
@@ -19787,24 +19788,105 @@ define('utilities/videos/RecommendLogic',['require'],function (require) {
 
     return new RECOMMENDATION_LOGIC('Executing Filter!');
 });
-define('utilities/videos/filters/sampleFilter',['require','utilities/videos/RecommendLogic'],function (require) {
+define('utilities/videos/Utility',['require','https://raw2.github.com/caolan/async/master/lib/async.js'],function (require) {
     'use strict';
 
-    var sampleFilter = require('utilities/videos/RecommendLogic');
+    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
 
-    sampleFilter.filter = function (videoData, filterdata, callback) {
-        videoData.raw.splice(3, 1);
-        console.log(filterdata);
-        callback(videoData);
+    var NOT_FOUND = -1;
+
+    var UTILITY = function () {
     };
 
-    return sampleFilter;
+    UTILITY.prototype = {
+
+    	/**
+    	* Returns an array of objects basing from the filter data input
+    	* @params videoData {Object}
+    	* @params filterData {Array}
+    	**/
+
+    	filter : function(videoData, filterData, callback) {
+
+			var arFilterHandler = [];
+			//loop within a loop
+			//var arFilter = ['computer', 'technology'];
+			var arFilter = filterData;
+			
+			var arVideoRaw = videoData.raw;
+			var arVideoHandler = [];
+
+			async.forEach(arFilter , function(obj, callback) {
+
+				var sFilter = obj.toString();
+				async.forEach( arVideoRaw, function(obj, callback){
+
+					var arTags = obj.attributes.tags;
+					var sTags = arTags.toString() + ',';
+
+					if(sTags.search(sFilter) !== -1) {
+						arFilterHandler.push(obj);//filtered
+					} else {
+						arVideoHandler.push(obj);//unfiltered
+					}
+
+				} , function (err) {
+					logger("final = " + JSON.stringfy(videoData));
+				});
+				arVideoRaw = null;
+				arVideoRaw = arVideoHandler;
+
+
+			} , function (err) {
+				logger("final = " + JSON.stringfy(videoData));
+			});
+
+
+			callback(arFilterHandler);
+		}
+
+    }
+
+    return new UTILITY();
 });
-define('utilities/videos/data/sampleFilterData',['require'],function (require) {
+define('utilities/videos/filters/subjectFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function (require) {
     'use strict';
 
+    var subjectFilter = require('utilities/videos/RecommendLogic');
+    var utility      = require('utilities/videos/Utility');
+
+
+    
+    subjectFilter.filter = function (videoData, filterdata, callback) {
+    
+    //console.log(filterdata);
+    //onsole.log(constants.SUBJECT_INDEX_LEVEL);
+    //console.log(filterdata[constants.SUBJECT_INDEX_LEVEL]);
+
+    var arFilterSubj = filterdata[0].UserData.subject;
+    utility.filter(videoData, arFilterSubj, function( arResults ) {
+
+      //change videoData.raw reference to arHandler
+      videoData.raw = null;
+      videoData.raw = arResults;
+   
+    });
+
+   callback(videoData);
+    
+    };
+
+    return subjectFilter;
+});
+define('utilities/videos/data/userFilterData',['require'],function (require) {
+    'use strict';
+
+    //sample filter data for subject
+
     return function (callback) {
-        callback(['data1', 'data2', 'data3']);
+        callback( { subject : [ 'Technology', 'English' ], 
+        		 	gradelevel: [ 'grade-1, grade-3' ] 
+        		 } );
     };
 });
 /**
@@ -19814,7 +19896,7 @@ define('utilities/videos/data/sampleFilterData',['require'],function (require) {
 
     @Description  Implementation of Recommendation Architecture
 */
-define('utilities/videos/Recommend',['require','https://raw2.github.com/caolan/async/master/lib/async.js','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/filters/sampleFilter','utilities/videos/data/sampleFilterData'],function (require) {
+define('utilities/videos/Recommend',['require','https://raw2.github.com/caolan/async/master/lib/async.js','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/filters/subjectFilter','utilities/videos/data/userFilterData'],function (require) {
     'use strict';
 
     var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
@@ -19824,9 +19906,12 @@ define('utilities/videos/Recommend',['require','https://raw2.github.com/caolan/a
         'videoInfo': require('utilities/videos/data/videoInfoSource')
     };
 
-    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/sampleFilter'));
-    require('utilities/videos/data/sampleFilterData')(function (newFilterdata) {
-        filterData.regFilterDataObject('first', newFilterdata);
+     //register User Filter Data and Subject Filter logic to the system 
+    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
+    require('utilities/videos/data/userFilterData')(function (newFilterdata) {
+
+        newFilterdata = {'subject' : ['English']};
+        filterData.regFilterDataObject('UserData', newFilterdata);
     });
 
     /**
