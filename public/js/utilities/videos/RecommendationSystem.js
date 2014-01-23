@@ -17,6 +17,7 @@ define(function (require) {
 
     function logger(message) {
         //alert(message);
+        console.log(message);
     }
 
     /** Object that provides methods for adding new filter logic */
@@ -65,7 +66,7 @@ define(function (require) {
                 obj.filter(videoData, filterData, function (outputVideoData) {
                     videoData = outputVideoData;
                 });
-                logger(JSON.stringify(videoData));
+                logger(videoData);
             }, function (err) {
                 logger(videoData);
             });

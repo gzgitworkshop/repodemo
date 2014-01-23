@@ -5,7 +5,6 @@ define(function (require) {
 
     sampleFilter.filter = function (videoData, filterdata, callback) {
         videoData.raw.splice(3, 1);
-        console.log(filterdata);
         callback(videoData);
     };
 
