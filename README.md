@@ -4,7 +4,7 @@ video-player
 
 ## Recommendation Architecture
 ***
-### [View Code](https://github.com/Tribu-Zubu/Tribu-Zubu/blob/master/codes/RecommendationArchitachture.js)
+### [Usage](https://github.com/Tribu-Zubu/Tribu-Zubu/wiki/Usage)  [View Code](https://github.com/Tribu-Zubu/Tribu-Zubu/blob/master/codes/RecommendationArchitachture.js)
 ***
 ### Core Functionality
 ***
