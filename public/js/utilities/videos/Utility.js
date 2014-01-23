@@ -1,3 +1,11 @@
+/**
+    Recommendation Architecture
+    Author : 
+    Last Date Modified : 
+
+    @Description  Generic utility functions or tools.
+ **/
+    
 define(function (require) {
     'use strict';
 
@@ -5,26 +13,40 @@ define(function (require) {
 
     var NOT_FOUND = -1;
 
+    function logger(sMsg) {
+    	console.log(sMsg);
+    };
+
     var UTILITY = function () {
     };
 
     UTILITY.prototype = {
 
     	/**
-    	* Returns an array of objects basing from the filter data input
+    	* Returns an array of objects to the callback function basing from the filter data input
     	* @params videoData {Object}
     	* @params filterData {Array}
     	**/
 
     	filter : function(videoData, filterData, callback) {
 
-			var arFilterHandler = [];
+    		/**
+    		* TODO: optimize the code below or change the code below into a more 'english' code
+    		* research some other techniques in filtering where filter data input is an array and
+    		* data to be filtered is also an array
+    		*/
+
+			var arFilterHandler = []; //handler of filtered data
+
 			//loop within a loop
-			//var arFilter = ['computer', 'technology'];
 			var arFilter = filterData;
 			
-			var arVideoRaw = videoData.raw;
+			///handler of videos to be filtered - feed in the for each
+			var arVideoRaw = videoData.raw; 
+			//handler of videos to be filtered - value will be assign to arVideoRaw
 			var arVideoHandler = [];
+
+			var err = null;
 
 			async.forEach(arFilter , function(obj, callback) {
 
@@ -43,6 +65,7 @@ define(function (require) {
 				} , function (err) {
 					logger("final = " + JSON.stringfy(videoData));
 				});
+				
 				arVideoRaw = null;
 				arVideoRaw = arVideoHandler;
 
@@ -50,9 +73,12 @@ define(function (require) {
 			} , function (err) {
 				logger("final = " + JSON.stringfy(videoData));
 			});
+			
+			if(!arFilterHandler.length) {
+				err = "No Filter Data";
+			}
 
-
-			callback(arFilterHandler);
+			callback(err, arFilterHandler);
 		}
 
     }

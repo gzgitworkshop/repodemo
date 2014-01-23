@@ -4,24 +4,31 @@ define(function (require) {
     var subjectFilter = require('utilities/videos/RecommendLogic');
     var utility      = require('utilities/videos/Utility');
 
+    function logger(sMsg) {
+      console.log(sMsg);
+    };
 
-    
-    subjectFilter.filter = function (videoData, filterdata, callback) {
-    
-    //console.log(filterdata);
-    //onsole.log(constants.SUBJECT_INDEX_LEVEL);
-    //console.log(filterdata[constants.SUBJECT_INDEX_LEVEL]);
+    subjectFilter.setExecuteMessage("Executing Subject Filter");
 
-    var arFilterSubj = filterdata[0].UserData.subject;
-    utility.filter(videoData, arFilterSubj, function( arResults ) {
+    subjectFilter.filter = function (videoData, filterData, callback) {
 
-      //change videoData.raw reference to arHandler
-      videoData.raw = null;
-      videoData.raw = arResults;
-   
-    });
+logger(filterData);
+      var arFilterSubj = filterData[0].UserData.subject;
+      utility.filter(videoData, arFilterSubj, function( err, arResults ) {
 
-   callback(videoData);
+        if(err) {
+          logger("Err: " + err);
+          return callback(err);
+        }
+
+        logger("Fetched filtered data");
+        
+        //change videoData.raw reference to arHandler
+        videoData.raw = null;
+        videoData.raw = arResults;
+        callback(videoData);
+
+      });
     
     };
 

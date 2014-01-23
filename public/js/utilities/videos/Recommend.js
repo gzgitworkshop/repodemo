@@ -15,9 +15,10 @@ define(function (require) {
         'videoInfo': require('utilities/videos/data/videoInfoSource')
     };
 
-    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/sampleFilter'));
-    require('utilities/videos/data/sampleFilterData')(function (newFilterdata) {
-        filterData.regFilterDataObject('first', newFilterdata);
+    //register User Filter Data and Subject Filter logic to the system
+    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
+    require('utilities/videos/data/userFilterData')(function (newFilterdata) {
+        filterData.regFilterDataObject('UserData', newFilterdata);
     });
 
     /**
