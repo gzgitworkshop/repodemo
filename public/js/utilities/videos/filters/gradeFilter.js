@@ -10,26 +10,25 @@ define(function (require) {
 
    gradeFilter.setExecuteMessage('Executing Grade Filter');
 
-    gradeFilter.filter = function (videoData, filterdata, callback) {
+  gradeFilter.filter = function (videoData, filterdata, callback) {
 
-      var arFilterGrade = filterdata['UserData'].gradelevel;
+    var arFilterGrade = filterdata['UserData'].gradelevel;
 
 
-      utility.filter(videoData, arFilterGrade, function( err, arResults ) {
+    utility.filter(videoData, arFilterGrade, function( arResults ) {
 
-        if(err) {
-          logger('Err: ' + err);
-          return callback(err);
-        }
+      if( !arResults ) {
+        return callback([]);
+      }
 
-        logger('Fetched filtered data');
+      logger('Fetched filtered data');
 
-        //change videoData.raw reference to arHandler
-        videoData.raw = null;
-        videoData.raw = arResults;
-        callback(videoData);
+      //change videoData.raw reference to arHandler
+      videoData.raw = null;
+      videoData.raw = arResults;
+      callback(videoData);
 
-      });
+    });
 
     };
 

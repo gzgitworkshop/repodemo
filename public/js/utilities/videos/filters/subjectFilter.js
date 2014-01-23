@@ -14,11 +14,10 @@ define(function (require) {
 
       var arFilterSubj = filterData['UserData'].subject;
 
-      utility.filter(videoData, arFilterSubj, function( err, arResults ) {
+      utility.filter(videoData, arFilterSubj, function( arResults ) {
 
-        if(err) {
-          logger('Err: ' + err);
-          return callback(err);
+        if( !arResults ) {
+          return callback([]);
         }
 
         logger('Fetched filtered data');
@@ -26,6 +25,7 @@ define(function (require) {
         //change videoData.raw reference to arHandler
         videoData.raw = null;
         videoData.raw = arResults;
+
         callback(videoData);
 
       });
