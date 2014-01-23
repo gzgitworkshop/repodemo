@@ -1,14 +1,14 @@
 define(function (require) {
     'use strict';
 
-    var gradeFilter = require('utilities/videos/RecommendLogic');
+    var gradeFilter = new (require('utilities/videos/RecommendLogic'))();
     var utility      = require('utilities/videos/Utility');
 
     function logger(sMsg) {
       console.log(sMsg);
     }
 
-    gradeFilter.setExecuteMessage('Executing Grade Filter');
+   gradeFilter.setExecuteMessage('Executing Grade Filter');
 
     gradeFilter.filter = function (videoData, filterdata, callback) {
 

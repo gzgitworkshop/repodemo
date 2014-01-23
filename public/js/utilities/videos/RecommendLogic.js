@@ -13,8 +13,8 @@ define(function (require) {
      * Object that wraps new filter logics to make it usable by the system
      * @param string executeMessage Message display when filter logic is executed
      */
-    var RECOMMENDATION_LOGIC = function (executeMessage) {
-        this.executeMessage = executeMessage;
+    var RECOMMENDATION_LOGIC = function () {
+        //this.executeMessage = executeMessage;
     };
     RECOMMENDATION_LOGIC.prototype = {
         /**
@@ -31,5 +31,5 @@ define(function (require) {
         }
     };
 
-    return new RECOMMENDATION_LOGIC('Executing Filter!');
+    return RECOMMENDATION_LOGIC;
 });

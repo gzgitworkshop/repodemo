@@ -17,6 +17,8 @@ define(function (require) {
 
     //register User Filter Data and Subject Filter logic to the system
     recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
+    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
+
     require('utilities/videos/data/userFilterData')(function (newFilterdata) {
         filterData.regFilterDataObject('UserData', newFilterdata);
     });

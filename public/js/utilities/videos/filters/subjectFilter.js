@@ -1,7 +1,7 @@
 define(function (require) {
     'use strict';
 
-    var subjectFilter = require('utilities/videos/RecommendLogic');
+    var subjectFilter = new (require('utilities/videos/RecommendLogic'))();
     var utility      = require('utilities/videos/Utility');
 
     function logger(sMsg) {
@@ -11,7 +11,7 @@ define(function (require) {
     subjectFilter.setExecuteMessage('Executing Subject Filter');
 
     subjectFilter.filter = function (videoData, filterData, callback) {
-      
+
       var arFilterSubj = filterData['UserData'].subject;
 
       utility.filter(videoData, arFilterSubj, function( err, arResults ) {
@@ -22,7 +22,7 @@ define(function (require) {
         }
 
         logger('Fetched filtered data');
-        
+
         //change videoData.raw reference to arHandler
         videoData.raw = null;
         videoData.raw = arResults;
