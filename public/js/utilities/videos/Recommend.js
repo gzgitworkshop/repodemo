@@ -5,7 +5,7 @@
 
     @Description  Implementation of Recommendation Architecture
 */
-define(function (require) {
+define(function(require) {
     'use strict';
 
     var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
@@ -16,10 +16,11 @@ define(function (require) {
     };
 
     //register User Filter Data and Subject Filter logic to the system
-    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
-    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
+    //recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
+    //recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
 
-    require('utilities/videos/data/userFilterData')(function (newFilterdata) {
+    require('utilities/videos/data/userFilterData')(function(newFilterdata) {
+        console.log(newFilterdata);
         filterData.regFilterDataObject('UserData', newFilterdata);
     });
 
@@ -33,27 +34,28 @@ define(function (require) {
          * Since there is a big possibility that data are fetched asynchronously, functions for fetching data are wrapped in async.series
          */
         async.series([
-        /**
-         * fetching video data/info
-         */
-        function (seriesCallback) {
-            videoInfo(seriesCallback);
-        },
-        /**
-         * fetching filter data
-         */
-        function (seriesCallback) {
-            seriesCallback(null, {
-                filterData: filterData.getFilterData()
-            });
-        }],
-        /**
-         * video data and filter data are combined into one array - results
-         */
+                /**
+                 * fetching video data/info
+                 */
+                function(seriesCallback) {
+                    videoInfo(seriesCallback);
+                },
+                /**
+                 * fetching filter data
+                 */
+                function(seriesCallback) {
+                    seriesCallback(null, {
+                        filterData: filterData.getFilterData()
+                    });
+                }
+            ],
+            /**
+             * video data and filter data are combined into one array - results
+             */
 
-        function (err, results) {
-            waterFallCallback(null, results);
-        });
+            function(err, results) {
+                waterFallCallback(null, results);
+            });
     }
 
     /**
@@ -73,21 +75,22 @@ define(function (require) {
 
     function recommend(callback) {
         async.waterfall([
-        /**
-         * performs data accural
-         * @param  object waterFallCallback mandatory async.waterfall parameter
-         */
-        function (waterFallCallback) {
-            fetchInputs(waterFallCallback);
-        },
-        /**
-         * performs filtering
-         * @param  object[] inputData results from data accural
-         * @param  object waterFallCallback mandatory async.waterfall parameter
-         */
-        function (inputData, waterFallCallback) {
-            recommedationSystem(inputData, waterFallCallback);
-        }], function (err, result) {
+            /**
+             * performs data accural
+             * @param  object waterFallCallback mandatory async.waterfall parameter
+             */
+            function(waterFallCallback) {
+                fetchInputs(waterFallCallback);
+            },
+            /**
+             * performs filtering
+             * @param  object[] inputData results from data accural
+             * @param  object waterFallCallback mandatory async.waterfall parameter
+             */
+            function(inputData, waterFallCallback) {
+                recommedationSystem(inputData, waterFallCallback);
+            }
+        ], function(err, result) {
             /**
              * Contains final filtered output, will be modified when applied to the actual resource app to output the video data directly
              */
@@ -101,17 +104,25 @@ define(function (require) {
      */
 
     function videoInfo(seriesCallback) {
-        seriesCallback(null, {
-            videoData: {
-                reserved: [],
-                raw: sources.videoInfo
-            }
+        // seriesCallback(null, {
+        //     videoData: {
+        //         reserved: [],
+        //         raw: sources.videoInfo
+        //     }
+        // });
+        sources.videoInfo(function(data) {
+             seriesCallback(null, {
+                 videoData: {
+                     reserved: [],
+                     raw: data
+                 }
+             });
         });
     }
 
 
-    return function (callback) {
-        recommend(function (result) {
+    return function(callback) {
+        recommend(function(result) {
             callback(result);
         });
 

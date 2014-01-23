@@ -17,7 +17,7 @@ define(function (require) {
 
     function logger(message) {
         //alert(message);
-        console.log(message);
+        //console.log(message);
     }
 
     /** Object that provides methods for adding new filter logic */

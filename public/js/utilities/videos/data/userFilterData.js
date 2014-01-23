@@ -1,11 +1,20 @@
-define(function (require) {
+define(function(require) {
     'use strict';
 
     //sample filter data for subject
 
-    return function (callback) {
-        callback( { subject : [ 'Vocational' ], 
-        		 	gradelevel: [ 'grade-1', 'grade-3' ] 
-        		 } );
+    return function(callback) {
+        $.ajax({
+            url: "http://localhost:8888/userData1.json",
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+            	console.log(data);
+                callback(data);
+            },
+            error: function(xhr, status, error) {
+                callback([]);
+            }
+        });
     };
 });
