@@ -15,9 +15,10 @@ define(function (require) {
     var arFilterGrade = filterdata['UserData'].gradelevel;
 
 
-    utility.filter(videoData, arFilterGrade, function( arResults ) {
+    utility.filter(videoData, arFilterGrade, 'gradelevel' ,function( arResults ) {
 
       if( !arResults ) {
+        logger('Empty results');
         return callback([]);
       }
 

@@ -14,77 +14,68 @@ define(function (require) {
     var NOT_FOUND = -1;
 
     function logger(sMsg) {
-    	console.log(sMsg);
-    };
+		console.log(sMsg);
+    }
 
     var UTILITY = function () {
     };
 
     UTILITY.prototype = {
+/**
+* Returns an array of objects to the callback function basing from the filter data input
+* @params videoData {Object}
+* @params filterData {Array}
+**/
 
-    	/**
-    	* Returns an array of objects to the callback function basing from the filter data input
-    	* @params videoData {Object}
-    	* @params filterData {Array}
-    	**/
+		filter : function( videoData, filterData, sFilterType, callback ) {
 
-    	filter : function(videoData, filterData, callback) {
+			if(videoData === null || filterData === null) {
 
-
-    		if(videoData === null || filterData === null) {
-
-    			return callback(null);
-    		}
-    		/**
-    		* TODO: optimize the code below or change the code below into a more 'english' code
-    		* research some other techniques in filtering where filter data input is an array and
-    		* data to be filtered is also an array
-    		*/
-
-			var arFilterHandler = []; //handler of filtered data
-
-			//loop within a loop
-			var arFilter = filterData;
-
-			///handler of videos to be filtered - feed in the for each
+				return callback(null);
+			}
+/**
+* TODO: optimize the code below or change the code below into a more 'english' code
+* research some other techniques in filtering where filter data input is an array and
+* data to be filtered is also an array
+*/
+			//handler of videos to be filtered in each iteration of filtered data arrays
 			var arVideoRaw = videoData.raw;
-			//handler of videos to be filtered - value will be assign to arVideoRaw
-			var arVideoHandler = [];
 
-
-
-			if(!arFilter || !arFilter.length) {
+			if(!filterData || !filterData.length) {
 				return callback(videoData.raw);
 
 			} else {
+				//handler of unfiltered vids - feed to second loop
+				var arVideoHandler = [];
+				//handler of filtered vids
+				var arFilterHandler = [];
 
-				async.forEach(arFilter , function(obj, callback) {
+				async.forEach(filterData , function(obj, filtercallback) {
 
 					var sFilter = obj.toString();
-					async.forEach( arVideoRaw, function(obj, callback){
 
-						var arTags = obj.attributes.tags;
-						var sTags = arTags.toString() + ',';
+					async.forEach( arVideoRaw, function(obj, videocallback){
 
-						if(sTags.search(sFilter) !== -1) {
+						var arTags = obj.attributes.tags[sFilterType];
+
+						if( $.inArray( sFilter , arTags ) !== NOT_FOUND) { //found
 							arFilterHandler.push(obj);//filtered
 						} else {
 							arVideoHandler.push(obj);//unfiltered
 						}
 
-					} , function (err) {
-						logger(videoData);
+					} , function (  ) {
+						logger( 'Video loop done' );
 					});
 
 					arVideoRaw = null;
 					arVideoRaw = arVideoHandler;
+					filtercallback(  );
 
-
-				} , function (err) {
-					logger(videoData);
+				} , function ( err ) {
+					logger( 'Filter data loop done' );
+					callback( arFilterHandler );
 				});
-
-				callback(arFilterHandler);
 
 			}
 

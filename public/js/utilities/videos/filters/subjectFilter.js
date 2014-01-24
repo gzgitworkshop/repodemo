@@ -14,7 +14,7 @@ define(function (require) {
 
       var arFilterSubj = filterData['UserData'].subject;
 
-      utility.filter(videoData, arFilterSubj, function( arResults ) {
+      utility.filter(videoData, arFilterSubj, 'subject' ,function( arResults ) {
 
         if( !arResults ) {
           return callback([]);
