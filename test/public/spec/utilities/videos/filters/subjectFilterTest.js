@@ -67,7 +67,7 @@ var videoData = {raw : [new models.VideoModel({
 			"Consumer science",
 			"Physical Education"];
 
-	  	describe( 'Subject Specific Content Filtering', function () {
+	  	describe( 'Subject Specific Content Filtering for Teachers', function () {
 			subarray.forEach(function (subj){
 				describe( subj+' Teacher', function () {
 
