@@ -83,10 +83,10 @@
             for (var obj in data) {
                 var role = data[obj];
                 if (isInIframe) {
-                    $('#peek ul').append("<div><a class=\"lLink\" href=\"#\" onclick=\"$(parent.document).find('iframe').attr('src', '/resources/5048e5d0e5e7fb620900005d/public/index.html?role=" + role + "')\"; return false;'>" + role + "</a></div>")
+                    $('#peek ul').append("<div><a class=\"lLink\" href=\"#\" onclick=\"$(parent.document).find('iframe').attr('src', '/resources/5048e5d0e5e7fb620900005d/public/index.html?role=" + role + "')\"; return false;'>" + decodeURI(role) + "</a></div>")
                 } else {
                     var winloc = window.location.href.split('?')[0];
-                    $('#peek ul').append("<div><a class='lLink' href='" + winloc + "?role=" + role + "'>" + role + "</a></div>")
+                    $('#peek ul').append("<div><a class='lLink' href='" + winloc + "?role=" + role + "'>" + decodeURI(role) + "</a></div>")
                 }
             }
         },
