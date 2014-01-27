@@ -7,7 +7,7 @@ define(function(require) {
 
     return function(callback) {
         $.ajax({
-            url: "http://zubu.cloudapp.net:8888/videoInfo1.json",
+            url: "http://zubu.cloudapp.net:8888/videoInfo1.json?ts=" + (new Date().getTime()),
             type: "GET",
             dataType: "json",
             success: function(data) {
