@@ -65,6 +65,7 @@ define(function(require) {
      */
 
     function recommedationSystem(inputData, waterFallCallback) {
+        console.log(inputData);
         recommendationSystem.setParameters(inputData[0], inputData[1]);
         waterFallCallback(null, recommendationSystem.execute());
     }
