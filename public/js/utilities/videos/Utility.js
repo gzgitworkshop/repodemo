@@ -14,7 +14,7 @@ define(function (require) {
     var NOT_FOUND = -1;
 
     function logger(sMsg) {
-		console.log(sMsg);
+		// console.log(sMsg);
     }
 
     var UTILITY = function () {
@@ -53,6 +53,8 @@ define(function (require) {
 				async.forEach(filterData , function(obj, filtercallback) {
 
 					var sFilter = obj.toString();
+					arVideoHandler = null;
+					arVideoHandler = [];
 
 					async.forEach( arVideoRaw, function(obj, videocallback){
 
@@ -64,8 +66,12 @@ define(function (require) {
 							arVideoHandler.push(obj);//unfiltered
 						}
 
-					} , function (  ) {
-						logger( 'Video loop done' );
+					} , function ( err ) {
+						if ( err ) {
+							logger( err );
+						} else {
+							logger( 'Video loop done' );
+						}
 					});
 
 					arVideoRaw = null;
@@ -73,8 +79,12 @@ define(function (require) {
 					filtercallback(  );
 
 				} , function ( err ) {
-					logger( 'Filter data loop done' );
-					callback( arFilterHandler );
+					if ( err ) {
+						logger( err );
+					} else {
+						logger( 'Filter data loop done' );
+						callback( arFilterHandler );
+					}
 				});
 
 			}
