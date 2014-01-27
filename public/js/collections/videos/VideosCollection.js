@@ -8,9 +8,6 @@ define( function ( require ) {
 		'initialize' : function ( models, options ) {
 		},
 
-		'model' : Videomodel//,
-
-		//'url'   : '/users'
-		
+		'model' : Videomodel
 	} );
 } );
