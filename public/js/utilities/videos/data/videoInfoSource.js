@@ -23,6 +23,7 @@ define(function(require) {
                         tags: obj.tags
                     }));
                 };
+		console.log(videoData);
                 callback(videoData);
             },
             error: function(xhr, status, error) {

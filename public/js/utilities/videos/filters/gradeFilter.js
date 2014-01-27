@@ -12,6 +12,10 @@ define(function(require) {
 
     gradeFilter.filter = function(videoData, filterdata, callback) {
 
+	console.log('------- GRADE LEVEL --------');
+	console.log(filterData);
+	console.log(filterData['UserData']);
+	console.log(filterData['UserData'].gradelevel);
         var arFilterGrade = filterdata['UserData'].gradelevel;
 
         try {
