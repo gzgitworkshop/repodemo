@@ -8,7 +8,7 @@
 define(function (require) {
     'use strict';
 
-    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+    var async = require('async');
 
     /**
      * internal messaging, to be able to turn messaging on/off and where to display w/o scouring the source code

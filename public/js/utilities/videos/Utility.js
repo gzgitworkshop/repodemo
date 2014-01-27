@@ -9,7 +9,7 @@
 define(function (require) {
     'use strict';
 
-    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+    var async = require('async');
 
     var NOT_FOUND = -1;
 

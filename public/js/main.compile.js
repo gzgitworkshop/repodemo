@@ -19625,10 +19625,10 @@ define('utilities/videos/FilterData',['require'],function (require) {
 
     @Description  Prototype for Recommendation System
 */
-define('utilities/videos/RecommendationSystem',['require','https://raw2.github.com/caolan/async/master/lib/async.js'],function (require) {
+define('utilities/videos/RecommendationSystem',['require','async'],function (require) {
     'use strict';
 
-    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+    var async = require('async');
 
     /**
      * internal messaging, to be able to turn messaging on/off and where to display w/o scouring the source code
@@ -19773,10 +19773,10 @@ define('utilities/videos/RecommendLogic',['require'],function (require) {
     @Description  Generic utility functions or tools.
  **/
 
-define('utilities/videos/Utility',['require','https://raw2.github.com/caolan/async/master/lib/async.js'],function (require) {
+define('utilities/videos/Utility',['require','async'],function (require) {
     'use strict';
 
-    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+    var async = require('async');
 
     var NOT_FOUND = -1;
 
@@ -19957,10 +19957,10 @@ define('utilities/videos/data/userFilterData',['require'],function(require) {
 
     @Description  Implementation of Recommendation Architecture
 */
-define('utilities/videos/Recommend',['require','https://raw2.github.com/caolan/async/master/lib/async.js','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/filters/subjectFilter','utilities/videos/filters/gradeFilter','utilities/videos/data/userFilterData'],function(require) {
+define('utilities/videos/Recommend',['require','async','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/filters/subjectFilter','utilities/videos/filters/gradeFilter','utilities/videos/data/userFilterData'],function(require) {
     'use strict';
 
-    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+    var async = require('async');
     var filterData = require('utilities/videos/FilterData');
     var recommendationSystem = require('utilities/videos/RecommendationSystem');
     var sources = {

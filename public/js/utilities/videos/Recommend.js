@@ -8,7 +8,7 @@
 define(function(require) {
     'use strict';
 
-    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+    var async = require('async');
     var filterData = require('utilities/videos/FilterData');
     var recommendationSystem = require('utilities/videos/RecommendationSystem');
     var sources = {
