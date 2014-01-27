@@ -7,14 +7,14 @@ define(function(require) {
 
     return function(callback) {
         $.ajax({
-            url: "http://zubu.cloudapp.net:8888/videoInfo1.json?ts=" + (new Date().getTime()),
-            type: "GET",
-            dataType: "json",
+            url: 'http://zubu.cloudapp.net:8888/videoInfo1.json?ts=' + (new Date().getTime()),
+            type: 'GET',
+            dataType: 'json',
             success: function(data) {
                 var videoData = [];
 
-                for(var obj in data) {
-                    var obj = data[obj];
+                for (var objIndex in data) {
+                    var obj = data[objIndex];
                     videoData.push(new models.VideoModel({
                         _id: obj._id,
                         imageUrl: obj.imageUrl,
@@ -22,13 +22,12 @@ define(function(require) {
                         duration: obj.duration,
                         tags: obj.tags
                     }));
-                };
-		console.log(videoData);
+                }
                 callback(videoData);
             },
             error: function(xhr, status, error) {
                 callback([]);
             }
         });
-    }
+    };
 });

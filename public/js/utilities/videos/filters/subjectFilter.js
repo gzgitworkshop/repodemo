@@ -12,10 +12,6 @@ define(function(require) {
 
     subjectFilter.filter = function(videoData, filterData, callback) {
 
-	console.log('------- SUBJECT --------');
-	console.log(filterData);
-	console.log(filterData['UserData']);
-	console.log(filterData['UserData'].subject);
         var arFilterSubj = filterData['UserData'].subject;
 
         try {

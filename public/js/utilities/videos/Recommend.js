@@ -20,7 +20,6 @@ define(function(require) {
     recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
 
     require('utilities/videos/data/userFilterData')(function(newFilterdata) {
-        console.log(newFilterdata);
         filterData.regFilterDataObject('UserData', newFilterdata);
     });
 
@@ -65,7 +64,6 @@ define(function(require) {
      */
 
     function recommedationSystem(inputData, waterFallCallback) {
-        console.log(inputData);
         recommendationSystem.setParameters(inputData[0], inputData[1]);
         waterFallCallback(null, recommendationSystem.execute());
     }
@@ -105,12 +103,6 @@ define(function(require) {
      */
 
     function videoInfo(seriesCallback) {
-        // seriesCallback(null, {
-        //     videoData: {
-        //         reserved: [],
-        //         raw: sources.videoInfo
-        //     }
-        // });
         sources.videoInfo(function(data) {
              seriesCallback(null, {
                  videoData: {
