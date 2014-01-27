@@ -19730,18 +19730,218 @@ define('utilities/videos/data/videoInfoSource',['require','models/videos/VideoMo
         });
     }
 });
+/**
+    Recommendation Logic
+    Author : Joseph Panuncillo
+    Last Date Modified : 1/22/14
+
+    @Description  Prototype for Recommendation Logic
+
+*/
+define('utilities/videos/RecommendLogic',['require'],function (require) {
+    'use strict';
+
+    /**
+     * Object that wraps new filter logics to make it usable by the system
+     * @param string executeMessage Message display when filter logic is executed
+     */
+    var RECOMMENDATION_LOGIC = function () {
+        //this.executeMessage = executeMessage;
+    };
+    RECOMMENDATION_LOGIC.prototype = {
+        /**
+         * function to be overridden to contain new recommendation/filter logic
+         * @param object[] filterData  list of video data/meta
+         * @param object[] videoData   map of distinct filter data
+         * @return object[] ist of video data/meta
+         */
+        filter: function (videoData, filterdata, callback) {
+            //do nothing
+        },
+        setExecuteMessage: function (executeMessage) {
+            this.executeMessage = executeMessage;
+        }
+    };
+
+    return RECOMMENDATION_LOGIC;
+});
+/**
+    Recommendation Architecture
+    Author :
+    Last Date Modified :
+
+    @Description  Generic utility functions or tools.
+ **/
+
+define('utilities/videos/Utility',['require','https://raw2.github.com/caolan/async/master/lib/async.js'],function (require) {
+    'use strict';
+
+    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+
+    var NOT_FOUND = -1;
+
+    function logger(sMsg) {
+		console.log(sMsg);
+    }
+
+    var UTILITY = function () {
+    };
+
+    UTILITY.prototype = {
+/**
+* Returns an array of objects to the callback function basing from the filter data input
+* @params videoData {Object}
+* @params filterData {Array}
+**/
+
+		filter : function( videoData, filterData, sFilterType, callback ) {
+
+			if(videoData === null || filterData === null) {
+
+				return callback(null);
+			}
+/**
+* TODO: optimize the code below or change the code below into a more 'english' code
+* research some other techniques in filtering where filter data input is an array and
+* data to be filtered is also an array
+*/
+			//handler of videos to be filtered in each iteration of filtered data arrays
+			var arVideoRaw = videoData.raw;
+
+			if(!filterData || !filterData.length) {
+				return callback(videoData.raw);
+
+			} else {
+				//handler of unfiltered vids - feed to second loop
+				var arVideoHandler = [];
+				//handler of filtered vids
+				var arFilterHandler = [];
+
+				async.forEach(filterData , function(obj, filtercallback) {
+
+					var sFilter = obj.toString();
+
+					async.forEach( arVideoRaw, function(obj, videocallback){
+
+						var arTags = obj.attributes.tags[sFilterType];
+
+						if( $.inArray( sFilter , arTags ) !== NOT_FOUND) { //found
+							arFilterHandler.push(obj);//filtered
+						} else {
+							arVideoHandler.push(obj);//unfiltered
+						}
+
+					} , function (  ) {
+						logger( 'Video loop done' );
+					});
+
+					arVideoRaw = null;
+					arVideoRaw = arVideoHandler;
+					filtercallback(  );
+
+				} , function ( err ) {
+					logger( 'Filter data loop done' );
+					callback( arFilterHandler );
+				});
+
+			}
+
+		}
+
+    }
+
+    return new UTILITY();
+});
+define('utilities/videos/filters/subjectFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function (require) {
+    'use strict';
+
+    var subjectFilter = new (require('utilities/videos/RecommendLogic'))();
+    var utility      = require('utilities/videos/Utility');
+
+    function logger(sMsg) {
+      console.log(sMsg);
+    }
+
+    subjectFilter.setExecuteMessage('Executing Subject Filter');
+
+    subjectFilter.filter = function (videoData, filterData, callback) {
+
+      var arFilterSubj = filterData['UserData'].subject;
+
+      utility.filter(videoData, arFilterSubj, 'subject' ,function( arResults ) {
+
+        if( !arResults ) {
+          return callback([]);
+        }
+
+        logger('Fetched filtered data');
+
+        //change videoData.raw reference to arHandler
+        videoData.raw = null;
+        videoData.raw = arResults;
+
+        callback(videoData);
+
+      });
+
+    };
+
+    return subjectFilter;
+});
+define('utilities/videos/filters/gradeFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function (require) {
+    'use strict';
+
+    var gradeFilter = new (require('utilities/videos/RecommendLogic'))();
+    var utility      = require('utilities/videos/Utility');
+
+    function logger(sMsg) {
+      console.log(sMsg);
+    }
+
+   gradeFilter.setExecuteMessage('Executing Grade Filter');
+
+  gradeFilter.filter = function (videoData, filterdata, callback) {
+
+    var arFilterGrade = filterdata['UserData'].gradelevel;
+
+
+    utility.filter(videoData, arFilterGrade, 'gradelevel' ,function( arResults ) {
+
+      if( !arResults ) {
+        logger('Empty results');
+        return callback([]);
+      }
+
+      logger('Fetched filtered data');
+
+      //change videoData.raw reference to arHandler
+      videoData.raw = null;
+      videoData.raw = arResults;
+      callback(videoData);
+
+    });
+
+    };
+
+    return gradeFilter;
+});
 define('utilities/videos/data/userFilterData',['require'],function(require) {
     'use strict';
 
-    //sample filter data for subject
+    function getURLParameter(name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
+    }
+
+    var role = getURLParameter('role');
+    role = role ? role + "/" : "";
 
     return function(callback) {
         $.ajax({
-            url: "http://localhost:8888/userData1.json",
+            url: "http://localhost:8888/" + role + "userData1.json",
             type: "GET",
             dataType: "json",
             success: function(data) {
-            	console.log(data);
+                console.log(data);
                 callback(data);
             },
             error: function(xhr, status, error) {
@@ -19757,7 +19957,7 @@ define('utilities/videos/data/userFilterData',['require'],function(require) {
 
     @Description  Implementation of Recommendation Architecture
 */
-define('utilities/videos/Recommend',['require','https://raw2.github.com/caolan/async/master/lib/async.js','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/data/userFilterData'],function(require) {
+define('utilities/videos/Recommend',['require','https://raw2.github.com/caolan/async/master/lib/async.js','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/filters/subjectFilter','utilities/videos/filters/gradeFilter','utilities/videos/data/userFilterData'],function(require) {
     'use strict';
 
     var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
@@ -19768,8 +19968,8 @@ define('utilities/videos/Recommend',['require','https://raw2.github.com/caolan/a
     };
 
     //register User Filter Data and Subject Filter logic to the system
-    //recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
-    //recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
+    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
+    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
 
     require('utilities/videos/data/userFilterData')(function(newFilterdata) {
         console.log(newFilterdata);

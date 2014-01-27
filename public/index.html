@@ -69,15 +69,25 @@
             }, 500).addClass('open');
         }
     });
+
+    var isInIframe = true;
+    try {
+        isInIframe = window.self !== window.top;
+    } catch (err) {}
+
     $.ajax({
         url: "http://localhost:8888/roles.json",
         type: "GET",
         dataType: "json",
         success: function(data) {
-            var winloc = window.location.href.split('?')[0];
             for (var obj in data) {
                 var role = data[obj];
-                $('#peek ul').append("<div><a class='lLink' href='" + winloc + "?role=" + role + "'>" + role + "</a></div>")
+                if (isInIframe) {
+                    $('#peek ul').append("<div><a class=\"lLink\" href=\"#\" onclick=\"$(parent.document).find('iframe').attr('src', '/resources/5048e5d0e5e7fb620900005d/public/index.html?role=" + role + "')\"; return false;'>" + role + "</a></div>")
+                } else {
+                    var winloc = window.location.href.split('?')[0];
+                    $('#peek ul').append("<div><a class='lLink' href='" + winloc + "?role=" + role + "'>" + role + "</a></div>")
+                }
             }
         },
         error: function(err) {}
