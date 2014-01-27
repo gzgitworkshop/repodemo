@@ -66,14 +66,44 @@ var videoData = {raw : [new models.VideoModel({
 			"Technology",
 			"Consumer science",
 			"Physical Education"];
-
-	  	describe( 'Subject Specific Content Filtering for Teachers', function () {
+            var _subarray = [
+            ['English', 'Foreign Language'],
+            ['Social Studies', 'Math'],
+            ['Science', 'Technology', 'Consumer'],
+            ['Performing Arts', 'Fine Arts'],
+            ['Music', 'Physical Education'],
+            ['Business', 'Vocational'],
+                [
+                    "Math",
+                    "English",
+                    "Science",
+                    "Foreign Language",
+                    "Fine Arts", 
+                    "Performing Arts",
+                    "Physical Education",
+                    "Vocational",
+                    "Social Studies",
+                    "Business",
+                    "Technology",
+                    "Consumer Science",
+                    "Music"
+                ]
+            ];
+            var _subarray_ = [
+                    ['Math','English', 'Science', 'Foreign Language'],
+                    ['Fine Arts', 'Performing Arts', 'Physical Education'],
+                    ['Music Vocational', 'Social Studies'],
+                    ['Business', 'Technology','Consumer Science']
+                ];
+describe( 'Subject Specific Content Filtering for Teachers', function () {
+	  	describe( 'For Elementary and Pre-kindergarten Level Teachers', function () {
 			subarray.forEach(function (subj){
 				describe( subj+' Teacher', function () {
 
 			            var grade = 'grade-6',
 			                filterData  = { UserData : { 
-			                                    subject : [ subj ]
+			                                    subject : [ subj ],
+                                                grade : ['prekindergarten','kindergarten','grade-1','grade-2','grade-3','grade-4','grade-5','grade-6']
 			                                }},
 			                video = videoData.raw;
 			          
@@ -82,7 +112,7 @@ var videoData = {raw : [new models.VideoModel({
 			                    if(res.raw) {
 			                       var obj = res.raw;
 			                        obj.forEach( function(val) {
-			                       console.log(val.attributes.tags);
+			                     //  console.log(val.attributes.tags + '---');
 			                            (val.attributes.tags).should.contain(subj);                    
 			                        })                  
 			                    }                   
@@ -92,5 +122,164 @@ var videoData = {raw : [new models.VideoModel({
 			});
 
 		});
+
+        describe( 'For Secondary Level Teachers', function () {
+            subarray.forEach(function (subj){
+                describe( subj+' Teacher', function () {
+
+                       // var grade = 'grade-6',
+                           var filterDatas  = { UserData : { 
+                                                subject : [ subj ],
+                                                grade : ['grade-7','grade-8','grade-9','grade-10','grade-11','grade-12','Vocational']
+                                            }},
+                            video = videoData.raw;
+
+                        it('Should fetch '+subj+' Contents', function () {
+                            subjectFilter.filter(videoData, filterDatas, function(res){
+                                if(res.raw) {
+                                   var obj = res.raw;
+                                    obj.forEach( function(val) {
+                                 //  console.log(val.attributes.tags + '---');
+                                        (val.attributes.tags).should.contain(subj);                    
+                                    })                  
+                                }                   
+                            });
+                        }); 
+                } );
+            });
+
+        });
+
+        describe( 'Subject Filtering on Multiple Subjects for Elementary Teachers', function () {
+            //alert(_subarray.length);
+          //  var xxx = 0;
+            _subarray.forEach(function (subj){
+                                  //  alert(xxx++);
+                describe( 'For '+subj+' Teacher', function () {
+
+                       // var grade = 'grade-6',
+                           var _filterDatas  = { UserData : { 
+                                                subject :  subj ,
+                                                grade : ['prekindergarten','kindergarten','grade-1','grade-2','grade-3','grade-4','grade-5','grade-6']
+                                            }},
+                            video = videoData.raw;
+                      
+                        it('Should fetch '+subj+' Contents', function () {
+                            subjectFilter.filter(videoData, _filterDatas, function(res){
+                                if(res.raw) {
+                                   var obj = res.raw;
+                                    obj.forEach( function(val) {
+                                        subj.forEach(function(vv){
+                                            _.contains(val.attributes.tags,vv).should.be.true;
+                                        });
+
+                                    })                  
+                                }                   
+                            });
+                        }); 
+                } );
+            });
+
+        });
+         describe( 'Subject Filtering on Multiple Subjects for Secondary Teachers', function () {
+            //alert(_subarray.length);
+          //  var xxx = 0;
+            _subarray.forEach(function (subj){
+                                  //  alert(xxx++);
+                describe( 'For '+subj+' Teacher', function () {
+
+                       // var grade = 'grade-6',
+                           var _filterDatas  = { UserData : { 
+                                                subject :  subj ,
+                                                grade : ['grade-7','grade-8','grade-9','grade-10','grade-11','grade-12','Vocational']
+                                            }},
+                            video = videoData.raw;
+                      
+                        it('Should fetch '+subj+' Contents', function () {
+                            subjectFilter.filter(videoData, _filterDatas, function(res){
+                                if(res.raw) {
+                                   var obj = res.raw;
+                                    obj.forEach( function(val) {
+                                 //  console.log(val.attributes.tags + '---');
+                                  //      (val.attributes.tags).should.contain(subj);   
+                                        subj.forEach(function(vv){
+                                            _.contains(val.attributes.tags,vv).should.be.true;
+                                        });
+
+                                    })                  
+                                }                   
+                            });
+                        }); 
+                } );
+            });
+
+        });
+         describe( 'Subject Filtering combinations of 3 to 4 subjects for Elementary Teachers', function () {
+            //alert(_subarray.length);
+          //  var xxx = 0;
+            _subarray_.forEach(function (subj){
+                                  //  alert(xxx++);
+                describe( 'For '+subj+' Teacher', function () {
+
+                       // var grade = 'grade-6',
+                           var _filterDatas  = { UserData : { 
+                                                subject :  subj ,
+                                                 grade : ['prekindergarten','kindergarten','grade-1','grade-2','grade-3','grade-4','grade-5','grade-6']
+                                            }},
+                            video = videoData.raw;
+                      
+                        it('Should fetch '+subj+' Contents', function () {
+                            subjectFilter.filter(videoData, _filterDatas, function(res){
+                                if(res.raw) {
+                                   var obj = res.raw;
+                                    obj.forEach( function(val) {
+                                 //  console.log(val.attributes.tags + '---');
+                                  //      (val.attributes.tags).should.contain(subj);   
+                                        subj.forEach(function(vv){
+                                            _.contains(val.attributes.tags,vv).should.be.true;
+                                        });
+
+                                    })                  
+                                }                   
+                            });
+                        }); 
+                } );
+            });
+
+        });
+         describe( 'Subject Filtering combinations of 3 to 4 subjects for Secondary Teachers', function () {
+            //alert(_subarray.length);
+          //  var xxx = 0;
+            _subarray_.forEach(function (subj){
+                                  //  alert(xxx++);
+                describe( 'For '+subj+' Teacher', function () {
+
+                       // var grade = 'grade-6',
+                           var _filterDatas  = { UserData : { 
+                                                subject :  subj ,
+                                                grade : ['grade-7','grade-8','grade-9','grade-10','grade-11','grade-12','Vocational']
+                                            }},
+                            video = videoData.raw;
+                      
+                        it('Should fetch '+subj+' Contents', function () {
+                            subjectFilter.filter(videoData, _filterDatas, function(res){
+                                if(res.raw) {
+                                   var obj = res.raw;
+                                    obj.forEach( function(val) {
+                                 //  console.log(val.attributes.tags + '---');
+                                      //  (val.attributes.tags).should.contain(subj);   
+                                       subj.forEach(function(vv){
+                                            _.contains(val.attributes.tags,vv).should.be.true;
+                                        });
+
+                                    })                  
+                                }                   
+                            });
+                        }); 
+                } );
+            });
+
+        });
+});
 
 } );
