@@ -37,6 +37,9 @@
     .lLink {
         text-decoration: none !important;
     }
+    #videos ul li.vid-thumb:nth-child(4) {
+        margin-right: 0px;
+    }
     </style>
 </head>
 
@@ -83,6 +86,14 @@
             for (var obj in data) {
                 var role = data[obj];
                 if (isInIframe) {
+                    var parentWindow = window.parent.document;
+
+                    $('#main-content.container', parentWindow).removeClass('container').addClass('container-fluid');
+                    $('#resource-content', parentWindow).css('width', '100%');
+                    $('#main-content.container').css('width', '100%');
+                    $('.wide-container.resources').css('width', '100%');
+                    $('.wide-container.resources').css('width', '100%');
+
                     $('#peek ul').append("<div><a class=\"lLink\" href=\"#\" onclick=\"$(parent.document).find('iframe').attr('src', '/resources/5048e5d0e5e7fb620900005d/public/index.html?role=" + role + "')\"; return false;'>" + decodeURI(role) + "</a></div>")
                 } else {
                     var winloc = window.location.href.split('?')[0];
