@@ -1,18 +1,22 @@
 define( function ( require ) {
-	'use strict';
+    'use strict';
 
-	var subjectFilter = require( 'utilities/videos/filters/subjectFilter' );
-    var util = require('utilities/videos/Recommend');
-	var models = {
+    var subjectFilter = require('utilities/videos/filters/subjectFilter');
+    var expect     = require( 'chai' ).expect();
+    var should     = require( 'chai' ).should();
+
+    var async = require('https://raw2.github.com/caolan/async/master/lib/async.js');
+    var models = {
         'VideoModel': require('models/videos/VideoModel')
     };
-var videoData = {raw : [new models.VideoModel({
+
+    var videoData = {raw : [new models.VideoModel({
             _id: 1,
             imageUrl: 'img/video-bg-2.png',
             topic: 'Closing the Gap',
             duration: '9 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "physical education", "foreign language" ],
                     gradelevel : [ "grade-1", "grade-2", "prekindergarten", "kindergarten" ]
             }
         }), new models.VideoModel({
@@ -21,7 +25,7 @@ var videoData = {raw : [new models.VideoModel({
             topic: 'Culture',
             duration: '3 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "physical education", "foreign language" ],
                     gradelevel : [ "grade-1", "grade-2", "Kindergarten", "grade-12" ]
             }
         }), new models.VideoModel({
@@ -30,7 +34,7 @@ var videoData = {raw : [new models.VideoModel({
             topic: 'Phones in Class',
             duration: '4 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "physical education" ],   
                     gradelevel : [ "grade-1", "grade-2" ]
             }
         }), new models.VideoModel({
@@ -39,7 +43,7 @@ var videoData = {raw : [new models.VideoModel({
             topic: 'Time Management',
             duration: '7 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "physical education", "business" ],
                     gradelevel : [ "grade-1", "grade-9", "kindergarten" ]
             }
         }), new models.VideoModel({
@@ -48,7 +52,7 @@ var videoData = {raw : [new models.VideoModel({
             topic: 'Tech Basics',
             duration: '4 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "physical education" ],
                     gradelevel : [ "grade-1", "grade-7" ]
             }
         }), new models.VideoModel({
@@ -57,7 +61,7 @@ var videoData = {raw : [new models.VideoModel({
             topic: 'Learning Games',
             duration: '9 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "technology", "foreign language" ],
                     gradelevel : [ "grade-1", "grade-2" ]
             }
         }), new models.VideoModel({
@@ -66,16 +70,16 @@ var videoData = {raw : [new models.VideoModel({
             topic: 'Communication',
             duration: '5 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "technology" ],
                     gradelevel : [ "grade-1", "grade-2" ]
             }
         }), new models.VideoModel({
             _id: 8,
             imageUrl: 'img/video-bg-8.png',
-            topic: 'Communications 2',
+            topic: 'Communication',
             duration: '5 min',
             tags: {
-                    subject : [ "English", "Technology" ],
+                    subject    : [ "english", "technology" ],
                     gradelevel : [ "grade-1", "grade-2", "kindergarten" ]
             }
         }), new models.VideoModel({
@@ -84,235 +88,130 @@ var videoData = {raw : [new models.VideoModel({
             topic: 'Teaching and the Internet',
             duration: '11 min',
             tags: {
-                    subject : [ "Technology" ],
+                    subject    : [ "english", "technology", "music" ],
                     gradelevel : [ "grade-1", "grade-2" ]
             }
-        })]};			
-			var subarray = ["English",
-			"Math",
-			"Foreign Language",
-			"Social Studies",
-			"Science",
-			"Performing Arts",
-			"Fine Arts",
-			"Music",
-            "Vocational",
-			"Technology",
-			"Consumer science",
-			"Physical Education"];
-            var _subarray = [
-            ['English', 'Foreign Language'],
-            ['Social Studies', 'Math'],
-            ['Science', 'Technology', 'Consumer'],
-            ['Performing Arts', 'Fine Arts'],
-            ['Music', 'Physical Education'],
-            ['Business', 'Vocational'],
-                [
-                    "Math",
-                    "English",
-                    "Science",
-                    "Foreign Language",
-                    "Fine Arts", 
-                    "Performing Arts",
-                    "Physical Education",
-                    "Vocational",
-                    "Social Studies",
-                    "Business",
-                    "Technology",
-                    "Consumer Science",
-                    "Music"
-                ]
-            ];
-            var _subarray_ = [
-                    ['Math', 'Science', 'Foreign Language'],
-                    ['Fine Arts', 'Performing Arts', 'Physical Education'],
-                    ['Music Vocational', 'Social Studies'],
-                    ['Business', 'Technology','Consumer Science']
-                ];
-describe( 'Subject Specific Content Filtering for Teachers', function () {
-	  	describe( 'For Elementary and Pre-kindergarten Level Teachers', function () {
-			subarray.forEach(function (subj){
-				describe( subj+' Teacher', function () {
+        })]};
 
-			            var grade = 'grade-6',
-			                filterData  = { UserData : { 
-			                                    subject : [ subj ],
-                                                grade : ['prekindergarten','kindergarten','grade-1','grade-2','grade-3','grade-4','grade-5','grade-6']
-			                                }},
-			                video = videoData.raw;
-			          
-			            it('Should fetch '+subj+' Contents', function () {
-			                subjectFilter.filter(videoData, filterData, function(res){
-			                    if(res.raw) {
-			                       var obj = res.raw;
-			                        obj.forEach( function(val) {
-			                     //  console.log(val.attributes.tags + '---');
-			                            (val.attributes.tags.subject).should.contain(subj);                    
-			                        })                  
-			                    }                   
-			                });
-			            }); 
-			    } );
-			});
+    describe( 'Subject Specific Content Filtering', function () {
 
-		});
+        var arrFilters = [  
+                            'English',
+                            'Math',
+                            'Foreign Languages',
+                            'Social Studies',
+                            'Science',
+                            'Performing Arts',
+                            'Fine Arts',
+                            'Music',
+                            'Technology',
+                            'Consumer Science',
+                            'Physical Education',
+                            'English and Foreign Language',
+                            'Social Studies and Math',
+                            'Science, Technology and Consumer Science',
+                            'Performing Arts and Fine Arts',
+                            'Music and Physical Education',
+                            'Business and Vocational Courses'
+                             ];
+        var tagFilters = [  
+                            ['english'],
+                            ['math'],
+                            ['foreign languages'],
+                            ['social studies'],
+                            ['science'],
+                            ['performing arts'],
+                            ['fine arts'],    
+                            ['music'],
+                            ['technology'],
+                            ['consumer science'],
+                            ['physical education'],
+                            ['english', 'foreign language'],
+                            ['social studies', 'math'],
+                            ['science', 'technology', 'consumer science'],
+                            ['performing arts', 'fine arts'],
+                            ['music', 'physical education'],
+                            ['business', 'vocational']
+                             ];
 
-        describe( 'For Secondary Level Teachers', function () {
-            subarray.forEach(function (subj){
-                describe( subj+' Teacher', function () {
+        arrFilters.forEach(function (item) {
 
-                       // var grade = 'grade-6',
-                           var filterDatas  = { UserData : { 
-                                                subject : [ subj ],
-                                                grade : ['grade-7','grade-8','grade-9','grade-10','grade-11','grade-12','Vocational']
-                                            }},
-                            video = videoData.raw;
+            var strHead = arrFilters.indexOf(item) + 1 + ' - ' + item + ' Test',
+                strdes1 = 'should display ' + item + ' contents/videos for ' + item + ' subjects',
+                strdes2 = 'should fetch all ' + ' contents/videos on the system';
+            describe( strHead, function () {
 
-                        it('Should fetch '+subj+' Contents', function () {
-                            subjectFilter.filter(videoData, filterDatas, function(res){
-                                if(res.raw) {
-                                   var obj = res.raw;
-                                    obj.forEach( function(val) {
-                                 //  console.log(val.attributes.tags + '---');
-                                        (val.attributes.tags).should.contain(subj);                    
-                                    })                  
-                                }                   
-                            });
-                        }); 
-                } );
-            });
+                var _subject = tagFilters[arrFilters.indexOf(item)],
+                        filterData  = { UserData : { 
+                                            subject : _subject, 
+                                            gradelevel: [  ] 
+                                        }},
+                        video = copyObject(videoData),
+                        counttags = 0,
+                        fetchedtags = 0,
+                        videoraw = video.raw;
+                var videoraw = video.raw;
+                it(strdes1, function () {
+                    if(video) {
 
-        });
-
-        describe( 'Subject Filtering on Multiple Subjects for Elementary Teachers', function () {
-            //alert(_subarray.length);
-          //  var xxx = 0;
-            _subarray.forEach(function (subj){
-                                   // alert('');
-                describe( 'For '+subj+' Teacher', function () {
-
-                       // var grade = 'grade-6',
-                           var _filterDatas  = { UserData : { 
-                                                subject :  subj ,
-                                                grade : ['prekindergarten','kindergarten','grade-1','grade-2','grade-3','grade-4','grade-5','grade-6']
-                                            }},
-                            video = videoData.raw;
-                      
-                        it('Should fetch '+subj+' Contents', function () {
-                            subjectFilter.filter(videoData, _filterDatas, function(res){
-                                if(res.raw) {
-                                   var obj = res.raw;
-                                    obj.forEach( function(val) {
-                                        subj.forEach(function(vv){
-                                            _.contains(val.attributes.tags,vv).should.be.true;
-                                        });
-
-                                    })                  
-                                }                   
-                            });
-                        }); 
-                } );
-            });
-
-        });
-         describe( 'Subject Filtering on Multiple Subjects for Secondary Teachers', function () {
-            //alert(_subarray.length);
-          //  var xxx = 0;
-            _subarray.forEach(function (subj){
-                                  //  alert(xxx++);
-                describe( 'For '+subj+' Teacher', function () {
-
-                       // var grade = 'grade-6',
-                           var _filterDatas  = { UserData : { 
-                                                subject :  subj ,
-                                                grade : ['grade-7','grade-8','grade-9','grade-10','grade-11','grade-12','Vocational']
-                                            }},
-                            video = videoData.raw;
-                      
-                        it('Should fetch '+subj+' Contents', function () {
-                            subjectFilter.filter(videoData, _filterDatas, function(res){
-                                if(res.raw) {
-                                   var obj = res.raw;
-                                    obj.forEach( function(val) {
-                                 //  console.log(val.attributes.tags + '---');
-                                  //      (val.attributes.tags).should.contain(subj);   
-                                        subj.forEach(function(vv){
-                                            _.contains(val.attributes.tags,vv).should.be.true;
-                                        });
-
-                                    })                  
-                                }                   
-                            });
-                        }); 
-                } );
-            });
-
-        });
-        describe( 'Subject Filtering combinations of 3 to 4 subjects for Elementary and prekindergarten Teachers', function () {
-            //var subj = ['Technology','Math'];
-             _subarray.forEach(function (subj){
-              var _filterDatas_  = { UserData : { 
-                                                subject :  subj ,
-                                                 grade : ['prekindergarten','kindergarten','grade-1','grade-2','grade-3','grade-4','grade-5','grade-6']
-                                            }},
-                            video = videoData.raw;
-
-                                                    it('Should fetch '+subj+' Contents', function () {
-                            subjectFilter.filter(videoData, _filterDatas_, function(res){
-                                    var flag = false;
-                                if(res.raw) {
-                                   var obj = res.raw;
-                                    obj.forEach( function(val) {
-                                  
-                                            subj.forEach(function(vvv){
-                                                if( _.contains(val.attributes.tags.subject,vvv))
-                                                    flag = true;
-                                                });
-                                                if(flag)
-                                                     true.should.be.true;
-                                                 else
-                                                    false.should.be.true;
-                                            });                  
-                                }                   
-                            });
-                        }); 
+                        videoraw.forEach ( function(val) {
+                            //loop on all values of tagfilters
+                            _subject.every ( function (fil)  {
+                                if( val.attributes.tags.subject.indexOf(fil) > -1 ) {
+                                    counttags++;
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            })
+                        })
+                        logger('available items on stack: ' + counttags);
+                    } 
+                    
+                    subjectFilter.filter(video, filterData, function(res){
+                        logger(res);
+                        if(res.raw) {
+                            fetchedtags = res.raw.length;
+                            logger('Fetched items: ' + fetchedtags);
+                            var obj = res.raw;
+                            obj.forEach( function(val) {
+                                var isExist = false;
+                                _subject.every ( function (fil)  {
+                                    if ( val.attributes.tags.subject.indexOf(fil) > -1 ) {
+                                        isExist = true;
+                                        return false;
+                                    } else {
+                                        return true;
+                                    }
+                                })
+                                isExist.should.be.true;
+                            })
+                        }
                     });
+                    
+                });
 
-       });
-         describe( 'Subject Filtering combinations of 3 to 4 subjects for Secondary and Vocational Teachers', function () {
-                //var subj = ['Technology','Math'];
-             _subarray_.forEach(function (subj){
-              var _filterDatas2_  = { UserData : { 
-                                                subject :  subj ,
-                                                grade : ['grade-7','grade-8','grade-9','grade-10','grade-11','grade-12','Vocational']
-                                            }},
-                            video = videoData.raw;
+                it(strdes2, function () {
+                    counttags.should.be.equal(fetchedtags);
+                    logger(videoData);
+                });
 
-                                                    it('Should fetch '+subj+' Contents', function () {
-                            subjectFilter.filter(videoData, _filterDatas2_, function(res){
-                                    var flag = false;
-                                if(res.raw) {
-                                   var obj = res.raw;
-                                    obj.forEach( function(val) {
-                                  
-                                            subj.forEach(function(vvv){
-                                                if( _.contains(val.attributes.tags.subject,vvv))
-                                                    flag = true;
-                                                });
-                                                if(flag)
-                                                     true.should.be.true;
-                                                 else
-                                                    false.should.be.true;
-                                            });                  
-                                }                   
-                            });
-                        }); 
-                                    util(function(data){   
-                                        console.log(data);
-                                    });
-                    });
+            } );
+        });
 
-       });
-});
+    });
+
+    function copyObject(obj) {
+        var newObj = {};
+        for (var key in obj) {
+            //copy all the fields
+            newObj[key] = obj[key];
+        }
+        return newObj;
+    }
+
+    function logger ( msg ) {
+        console.log ( msg );
+    }
 
 });
