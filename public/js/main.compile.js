@@ -19474,15 +19474,12 @@ define( 'collections/videos/VideosCollection',['require','backbone','models/vide
 		'initialize' : function ( models, options ) {
 		},
 
-		'model' : Videomodel//,
-
-		//'url'   : '/users'
-		
+		'model' : Videomodel
 	} );
 } );
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!templates/videos/videosLayout.html',[],function () { return '<div class="wide-container resources">\n    <div class="resource-list-heading">\n\t<h2>Recommendeds (<span id="allCount">0</span>)</h2>\n        <a class="view-more" href="#">View 0 more<img src="img/view-more-arrow.png"></a>\n    </div>\n    <div id="videos"></div>\n</div>';});
+define('text!templates/videos/videosLayout.html',[],function () { return '<div class="wide-container-fluid resources">\n    <div class="resource-list-heading">\n\t<h2>Recommendeds (<span id="allCount">0</span>)</h2>\n        <a class="view-more" href="#">View 0 more<img src="img/view-more-arrow.png"></a>\n    </div>\n    <div id="videos"></div>\n</div>';});
 
 define('views/videos/VideosLayout',['require','marionette','underscore','text!templates/videos/videosLayout.html'],function(require) {
     'use strict';
@@ -19706,14 +19703,14 @@ define('utilities/videos/data/videoInfoSource',['require','models/videos/VideoMo
 
     return function(callback) {
         $.ajax({
-            url: "http://localhost:8888/videoInfo1.json",
-            type: "GET",
-            dataType: "json",
+            url: 'http://zubu.cloudapp.net:8888/videoInfo1.json?ts=' + (new Date().getTime()),
+            type: 'GET',
+            dataType: 'json',
             success: function(data) {
                 var videoData = [];
 
-                for(var obj in data) {
-                    var obj = data[obj];
+                for (var objIndex in data) {
+                    var obj = data[objIndex];
                     videoData.push(new models.VideoModel({
                         _id: obj._id,
                         imageUrl: obj.imageUrl,
@@ -19721,14 +19718,14 @@ define('utilities/videos/data/videoInfoSource',['require','models/videos/VideoMo
                         duration: obj.duration,
                         tags: obj.tags
                     }));
-                };
+                }
                 callback(videoData);
             },
             error: function(xhr, status, error) {
                 callback([]);
             }
         });
-    }
+    };
 });
 /**
     Recommendation Logic
@@ -19781,7 +19778,7 @@ define('utilities/videos/Utility',['require','async'],function (require) {
     var NOT_FOUND = -1;
 
     function logger(sMsg) {
-		console.log(sMsg);
+		// console.log(sMsg);
     }
 
     var UTILITY = function () {
@@ -19820,6 +19817,8 @@ define('utilities/videos/Utility',['require','async'],function (require) {
 				async.forEach(filterData , function(obj, filtercallback) {
 
 					var sFilter = obj.toString();
+					arVideoHandler = null;
+					arVideoHandler = [];
 
 					async.forEach( arVideoRaw, function(obj, videocallback){
 
@@ -19831,8 +19830,12 @@ define('utilities/videos/Utility',['require','async'],function (require) {
 							arVideoHandler.push(obj);//unfiltered
 						}
 
-					} , function (  ) {
-						logger( 'Video loop done' );
+					} , function ( err ) {
+						if ( err ) {
+							logger( err );
+						} else {
+							logger( 'Video loop done' );
+						}
 					});
 
 					arVideoRaw = null;
@@ -19840,8 +19843,12 @@ define('utilities/videos/Utility',['require','async'],function (require) {
 					filtercallback(  );
 
 				} , function ( err ) {
-					logger( 'Filter data loop done' );
-					callback( arFilterHandler );
+					if ( err ) {
+						logger( err );
+					} else {
+						logger( 'Filter data loop done' );
+						callback( arFilterHandler );
+					}
 				});
 
 			}
@@ -19852,75 +19859,83 @@ define('utilities/videos/Utility',['require','async'],function (require) {
 
     return new UTILITY();
 });
-define('utilities/videos/filters/subjectFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function (require) {
+define('utilities/videos/filters/subjectFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function(require) {
     'use strict';
 
-    var subjectFilter = new (require('utilities/videos/RecommendLogic'))();
-    var utility      = require('utilities/videos/Utility');
+    var subjectFilter = new(require('utilities/videos/RecommendLogic'))();
+    var utility = require('utilities/videos/Utility');
 
     function logger(sMsg) {
-      console.log(sMsg);
+        console.log(sMsg);
     }
 
     subjectFilter.setExecuteMessage('Executing Subject Filter');
 
-    subjectFilter.filter = function (videoData, filterData, callback) {
+    subjectFilter.filter = function(videoData, filterData, callback) {
 
-      var arFilterSubj = filterData['UserData'].subject;
+        var arFilterSubj = filterData['UserData'].subject;
 
-      utility.filter(videoData, arFilterSubj, 'subject' ,function( arResults ) {
+        try {
+            utility.filter(videoData, arFilterSubj, 'subject', function(arResults) {
 
-        if( !arResults ) {
-          return callback([]);
+                if (!arResults) {
+                    return callback([]);
+                }
+
+                logger('Fetched filtered data');
+
+                //change videoData.raw reference to arHandler
+                videoData.raw = null;
+                videoData.raw = arResults;
+
+                callback(videoData);
+
+            });
+        } catch (err) {
+            logger(err);
+            callback([]);
         }
-
-        logger('Fetched filtered data');
-
-        //change videoData.raw reference to arHandler
-        videoData.raw = null;
-        videoData.raw = arResults;
-
-        callback(videoData);
-
-      });
 
     };
 
     return subjectFilter;
 });
-define('utilities/videos/filters/gradeFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function (require) {
+define('utilities/videos/filters/gradeFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function(require) {
     'use strict';
 
-    var gradeFilter = new (require('utilities/videos/RecommendLogic'))();
-    var utility      = require('utilities/videos/Utility');
+    var gradeFilter = new(require('utilities/videos/RecommendLogic'))();
+    var utility = require('utilities/videos/Utility');
 
     function logger(sMsg) {
-      console.log(sMsg);
+        console.log(sMsg);
     }
 
-   gradeFilter.setExecuteMessage('Executing Grade Filter');
+    gradeFilter.setExecuteMessage('Executing Grade Filter');
 
-  gradeFilter.filter = function (videoData, filterdata, callback) {
+    gradeFilter.filter = function(videoData, filterdata, callback) {
 
-    var arFilterGrade = filterdata['UserData'].gradelevel;
+        var arFilterGrade = filterdata['UserData'].gradelevel;
 
+        try {
+            utility.filter(videoData, arFilterGrade, 'gradelevel', function(arResults) {
 
-    utility.filter(videoData, arFilterGrade, 'gradelevel' ,function( arResults ) {
+                if (!arResults) {
+                    logger('Empty results');
+                    return callback([]);
+                }
 
-      if( !arResults ) {
-        logger('Empty results');
-        return callback([]);
-      }
+                logger('Fetched filtered data');
 
-      logger('Fetched filtered data');
+                //change videoData.raw reference to arHandler
+                videoData.raw = null;
+                videoData.raw = arResults;
+                callback(videoData);
 
-      //change videoData.raw reference to arHandler
-      videoData.raw = null;
-      videoData.raw = arResults;
-      callback(videoData);
-
-    });
-
+            });
+        } catch (err) {
+            logger(err);
+            callback([]);
+        }
     };
 
     return gradeFilter;
@@ -19929,26 +19944,47 @@ define('utilities/videos/data/userFilterData',['require'],function(require) {
     'use strict';
 
     function getURLParameter(name) {
-        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ''])[1].replace(/\+/g, '%20')) || null;
     }
 
-    var role = getURLParameter('role');
-    role = role ? role + "/" : "";
+    var demoObj = {
+        'subject': [],
+        'gradelevel': []
+    };
 
     return function(callback) {
         $.ajax({
-            url: "http://localhost:8888/" + role + "userData1.json",
+            url: "http://zubu.cloudapp.net:8888/subjects.json?ts=" + (new Date().getTime()),
             type: "GET",
             dataType: "json",
             success: function(data) {
                 console.log(data);
-                callback(data);
+
+                var sub = getURLParameter('sub');
+                var gra = getURLParameter('gra');
+
+                //for demo only eval() will be removed
+                if (sub) {
+                    eval("demoObj.subject = " + sub + ";");
+                }
+                if (gra) {
+                    eval("demoObj.gradelevel = " + gra + ";");
+                }
+
+                for (var i in demoObj.subject) {
+                    demoObj.subject[i] = data.subjects[demoObj.subject[i]].toLowerCase();
+                }
+                for (var i in demoObj.gradelevel) {
+                    demoObj.gradelevel[i] = data.grades[demoObj.gradelevel[i]].toLowerCase();
+                }
+
+                console.log(demoObj);
+
+                callback(demoObj);
             },
-            error: function(xhr, status, error) {
-                callback([]);
-            }
+            error: function(err) {}
         });
-    };
+    }
 });
 /**
     Recommendation Architecture
@@ -19972,7 +20008,6 @@ define('utilities/videos/Recommend',['require','async','utilities/videos/FilterD
     recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
 
     require('utilities/videos/data/userFilterData')(function(newFilterdata) {
-        console.log(newFilterdata);
         filterData.regFilterDataObject('UserData', newFilterdata);
     });
 
@@ -20056,12 +20091,6 @@ define('utilities/videos/Recommend',['require','async','utilities/videos/FilterD
      */
 
     function videoInfo(seriesCallback) {
-        // seriesCallback(null, {
-        //     videoData: {
-        //         reserved: [],
-        //         raw: sources.videoInfo
-        //     }
-        // });
         sources.videoInfo(function(data) {
              seriesCallback(null, {
                  videoData: {

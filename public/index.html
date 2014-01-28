@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
+<!--[if   IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if   IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if   gt IE 8]><!-->
 <html lang="en">
 <!--<![endif]-->
 
@@ -22,17 +22,17 @@
         overflow-x : hidden;
     }
     #peek {
-        width            : 350px;
-        float            : right;
-        position         : absolute;
-        left             : -355px;
+        width : 200px;
+        float : right;
+        position : absolute;
+        left : -205px;
         background-color : #99FFCC;
-        opacity          : .75;
-        padding          : 1em;
-        color            : #003300;
-        font-family      : 'Avenir LT W01 65 Medium', 'AvenirLTW01-65MediumObl', 'Avenir LT W01 85 Heavy', 'AvenirLTW01-85HeavyObli', 'Avenir', 'helvetica neue', helvetica, arial, sans-serif;
-        font-weight      : 300;
-        z-index          : 100;
+        opacity : .75;
+        padding : 1em;
+        color : #003300;
+        font-family :'Avenir LT W01 65 Medium', 'AvenirLTW01-65MediumObl', 'Avenir LT W01 85 Heavy', 'AvenirLTW01-85HeavyObli', 'Avenir', 'helvetica neue', helvetica, arial, sans-serif;
+        font-weight : 300;
+        z-index : 100;
     }
     .lLink {
         text-decoration: none !important;
@@ -65,17 +65,29 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-    $('#peek').on('dblclick', function() {
+    $('#peek').on('mouseenter', function() {
         var $this = $(this);
-        if ($this.hasClass('open')) {
+        //if ($this.hasClass('open')) {
             $this.animate({
                 left: '0px'
             }, 500).removeClass('open');
-        } else {
+        // } else {
+        //     $this.animate({
+        //         left: '-205px'
+        //     }, 500).addClass('open');
+        // }
+    });
+    $('#peek').on('mouseleave', function() {
+        var $this = $(this);
+        // if ($this.hasClass('open')) {
+        //     $this.animate({
+        //         left: '0px'
+        //     }, 500).removeClass('open');
+        // } else {
             $this.animate({
-                left: '-355px'
+                left: '-205px'
             }, 500).addClass('open');
-        }
+        //}
     });
 
     var isInIframe = true;
@@ -109,20 +121,57 @@
     //     },
     //     error: function(err) {}
     // });
+
+    function getURLParameter(name) {
+        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ''])[1].replace(/\+/g, '%20')) || null;
+    }
+
+    var demoObj = {
+        'subject': [],
+        'gradelevel': []
+    };
+
     $.ajax({
         url: "http://zubu.cloudapp.net:8888/subjects.json?ts=" + (new Date().getTime()),
         type: "GET",
         dataType: "json",
         success: function(data) {
+
+            var subRaw = getURLParameter('sub');
+            var graRaw = getURLParameter('gra');
+            var sub = [];
+            var gra = [];
+
+            //for demo only eval() will be removed
+            if (subRaw) {
+                eval("sub = " + subRaw + ";");
+            }
+            if (graRaw) {
+                eval("gra = " + graRaw + ";");
+            }
+
             if (data) {
                 for (var objIndex in data.subjects) {
+                    var input = $("<input />").attr("type", "checkbox").attr("name", "sub").attr("value", objIndex);
+
+
+                    if (sub.indexOf(parseInt(objIndex, 10)) > -1) {
+                        input.attr("checked", "checked");
+                    }
+
                     $("#sublist").append(
-                        $("<li />").addClass("lLink").append($("<input />").attr("type", "checkbox").attr("name", "sub").attr("value", objIndex)).append(data.subjects[objIndex])
+                        $("<li />").addClass("lLink").append(input).append(data.subjects[objIndex])
                     );
                 }
                 for (var objIndex in data.grades) {
+                    var input = $("<input />").attr("type", "checkbox").attr("name", "gra").attr("value", objIndex);
+
+                    if (gra.indexOf(parseInt(objIndex, 10)) > -1) {
+                        input.attr("checked", "checked");
+                    }
+
                     $("#gradlist").append(
-                        $("<li />").addClass("lLink").append($("<input />").attr("type", "checkbox").attr("name", "gra").attr("value", objIndex)).append(data.grades[objIndex])
+                        $("<li />").addClass("lLink").append(input).append(data.grades[objIndex])
                     );
                 }
             }
