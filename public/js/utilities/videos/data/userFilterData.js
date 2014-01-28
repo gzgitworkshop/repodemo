@@ -5,23 +5,6 @@ define(function(require) {
         return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ''])[1].replace(/\+/g, '%20')) || null;
     }
 
-    // var role = getURLParameter('role');
-    // role = role ? role + '/' : '';
-
-    // return function(callback) {
-    //     $.ajax({
-    //         url: 'http://zubu.cloudapp.net:8888/' + role + 'userData1.json?ts=' + (new Date().getTime()),
-    //         type: 'GET',
-    //         dataType: 'json',
-    //         success: function(data) {
-    //             callback(data);
-    //         },
-    //         error: function(xhr, status, error) {
-    //             callback([]);
-    //         }
-    //     });
-    // };
-
     var demoObj = {
         'subject': [],
         'gradelevel': []
@@ -33,6 +16,8 @@ define(function(require) {
             type: "GET",
             dataType: "json",
             success: function(data) {
+                console.log(data);
+
                 var sub = getURLParameter('sub');
                 var gra = getURLParameter('gra');
 
