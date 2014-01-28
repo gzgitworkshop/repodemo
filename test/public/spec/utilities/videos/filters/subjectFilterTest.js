@@ -16,7 +16,7 @@ define( function ( require ) {
             topic: 'Closing the Gap',
             duration: '9 min',
             tags: {
-                    subject    : [ "english", "physical education", "foreign language" ],
+                    subject    : [ "ela", "physical education", "foreign language" ],
                     gradelevel : [ "grade-1", "grade-2", "prekindergarten", "kindergarten" ]
             }
         }), new models.VideoModel({
@@ -25,7 +25,7 @@ define( function ( require ) {
             topic: 'Culture',
             duration: '3 min',
             tags: {
-                    subject    : [ "english", "physical education", "foreign language" ],
+                    subject    : [ "ela", "physical education", "foreign language" ],
                     gradelevel : [ "grade-1", "grade-2", "Kindergarten", "grade-12" ]
             }
         }), new models.VideoModel({
@@ -34,7 +34,7 @@ define( function ( require ) {
             topic: 'Phones in Class',
             duration: '4 min',
             tags: {
-                    subject    : [ "english", "physical education" ],   
+                    subject    : [ "ela", "physical education" ],   
                     gradelevel : [ "grade-1", "grade-2" ]
             }
         }), new models.VideoModel({
@@ -43,7 +43,7 @@ define( function ( require ) {
             topic: 'Time Management',
             duration: '7 min',
             tags: {
-                    subject    : [ "english", "physical education", "business" ],
+                    subject    : [ "ela", "physical education", "business" ],
                     gradelevel : [ "grade-1", "grade-9", "kindergarten" ]
             }
         }), new models.VideoModel({
@@ -52,7 +52,7 @@ define( function ( require ) {
             topic: 'Tech Basics',
             duration: '4 min',
             tags: {
-                    subject    : [ "english", "physical education" ],
+                    subject    : [ "ela", "physical education" ],
                     gradelevel : [ "grade-1", "grade-7" ]
             }
         }), new models.VideoModel({
@@ -61,7 +61,7 @@ define( function ( require ) {
             topic: 'Learning Games',
             duration: '9 min',
             tags: {
-                    subject    : [ "english", "technology", "foreign language" ],
+                    subject    : [ "ela", "technology", "foreign language" ],
                     gradelevel : [ "grade-1", "grade-2" ]
             }
         }), new models.VideoModel({
@@ -70,7 +70,7 @@ define( function ( require ) {
             topic: 'Communication',
             duration: '5 min',
             tags: {
-                    subject    : [ "english", "technology" ],
+                    subject    : [ "ela", "technology" ],
                     gradelevel : [ "grade-1", "grade-2" ]
             }
         }), new models.VideoModel({
@@ -79,7 +79,7 @@ define( function ( require ) {
             topic: 'Communication',
             duration: '5 min',
             tags: {
-                    subject    : [ "english", "technology" ],
+                    subject    : [ "ela", "technology" ],
                     gradelevel : [ "grade-1", "grade-2", "kindergarten" ]
             }
         }), new models.VideoModel({
@@ -88,7 +88,7 @@ define( function ( require ) {
             topic: 'Teaching and the Internet',
             duration: '11 min',
             tags: {
-                    subject    : [ "english", "technology", "music" ],
+                    subject    : [ "ela", "technology", "music" ],
                     gradelevel : [ "grade-1", "grade-2" ]
             }
         })]};
@@ -96,7 +96,7 @@ define( function ( require ) {
     describe( 'Subject Specific Content Filtering', function () {
 
         var arrFilters = [  
-                            'English',
+                            'ELA',
                             'Math',
                             'Foreign Languages',
                             'Social Studies',
@@ -107,15 +107,16 @@ define( function ( require ) {
                             'Technology',
                             'Consumer Science',
                             'Physical Education',
-                            'English and Foreign Language',
+                            'ELA and Foreign Language',
                             'Social Studies and Math',
                             'Science, Technology and Consumer Science',
                             'Performing Arts and Fine Arts',
                             'Music and Physical Education',
-                            'Business and Vocational Courses'
+                            'Business and Vocational Courses',
+                            'Math, English, Science and Foreign Languages'
                              ];
         var tagFilters = [  
-                            ['english'],
+                            ['ela'],
                             ['math'],
                             ['foreign languages'],
                             ['social studies'],
@@ -126,12 +127,13 @@ define( function ( require ) {
                             ['technology'],
                             ['consumer science'],
                             ['physical education'],
-                            ['english', 'foreign language'],
+                            ['ela', 'foreign language'],
                             ['social studies', 'math'],
                             ['science', 'technology', 'consumer science'],
                             ['performing arts', 'fine arts'],
                             ['music', 'physical education'],
-                            ['business', 'vocational']
+                            ['business', 'vocational'],
+                            ['math', 'ela', 'science', 'foreign language'],
                              ];
 
         arrFilters.forEach(function (item) {
