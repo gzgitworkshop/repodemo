@@ -82,12 +82,12 @@
     try {
         var parentWindow = window.parent.document;
 
-	$(window.document).ready(function() {
-	    $('#main-content.container', parentWindow).removeClass('container').addClass('container-fluid');
-	    $('#resource-content', parentWindow).removeClass('container').removeClass('span12').addClass('container-fluid');
-	    $('iframe#resource-app', parentWindow).addClass('container-fluid');
-	    $('#main-content.container').removeClass('container').addClass('container-fluid');
-	});
+        $(window.document).ready(function() {
+            $('#main-content.container', parentWindow).removeClass('container').addClass('container-fluid');
+            $('#resource-content', parentWindow).removeClass('container').removeClass('span12').addClass('container-fluid');
+            $('iframe#resource-app', parentWindow).addClass('container-fluid');
+            $('#main-content.container').removeClass('container').addClass('container-fluid');
+        });
 
         isInIframe = window.self !== window.top;
     } catch (err) {}
