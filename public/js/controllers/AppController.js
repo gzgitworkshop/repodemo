@@ -9,7 +9,7 @@ define( function ( require ) {
 
 	var applications = {};
 	var collections  = {
-		'VideosCollection' : require( 'collections/videos/VideosCollection' )
+		'VideoCollection' : require( 'collections/videos/VideoCollection' )
 	};
 	var components   = {};
 	var layouts      = {
