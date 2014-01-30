@@ -19464,7 +19464,7 @@ define( 'models/videos/VideoModel',['require','backbone'],function ( require ) {
     } );
 } );
 
-define( 'collections/videos/VideosCollection',['require','backbone','models/videos/VideoModel'],function ( require ) {
+define( 'collections/videos/VideoCollection',['require','backbone','models/videos/VideoModel'],function ( require ) {
 	'use strict';
 
 	var Backbone = require( 'backbone' );
@@ -19574,38 +19574,24 @@ define( 'views/ErrorView',['require','underscore','marionette','text!templates/e
 
     @Description  Prototype for Filter Data
 */
-define('utilities/videos/FilterData',['require'],function (require) {
+define( 'utilities/videos/FilterData',['require'],function ( require ) {
     'use strict';
-
-    /**
-     * Utility function for assigning variable keys to object attributes, we'll see if we need it for other function. Stay here for the meantime.
-     * @param  string key     Attribute key
-     * @param  object value   Attribute value
-     * @return object         generated object
-     */
-
-    function objectMaker(key, value) {
-        var jsonVariable = {};
-        jsonVariable[key] = value;
-        return jsonVariable;
-    }
 
     /**
      * Object that wraps new filter logics to make it usable by the system
      * @param string executeMessage Message display when filter logic is executed
      */
     /** Object that provides methods for adding new filter data */
-    var FILTER_DATA = function () {
+    var filterData = function () {
         this.filterDataCollection = {};
     };
-    FILTER_DATA.prototype = {
+    filterData.prototype = {
         /**
          * add new filter data
          * @param  string key                   object ID
          * @param  function newFilterDataObject object that returns the new filter data
          */
-        regFilterDataObject: function (key, newFilterDataObject) {
-            //this.filterDataCollection.push(objectMaker(key, newFilterDataObject));
+        regFilterDataObject: function ( key, newFilterDataObject ) {
             this.filterDataCollection[key] = newFilterDataObject;
         },
         getFilterData: function () {
@@ -19613,7 +19599,7 @@ define('utilities/videos/FilterData',['require'],function (require) {
         }
     };
 
-    return new FILTER_DATA();
+    return new filterData();
 });
 /**
     Recommendation System
@@ -19940,51 +19926,59 @@ define('utilities/videos/filters/gradeFilter',['require','utilities/videos/Recom
 
     return gradeFilter;
 });
-define('utilities/videos/data/userFilterData',['require'],function(require) {
+define( 'utilities/videos/data/userFilterData',['require','http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js'],function( require ) {
     'use strict';
 
-    function getURLParameter(name) {
-        return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ''])[1].replace(/\+/g, '%20')) || null;
+    require('http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js');
+
+    function getURLParameter( name ) {
+        return decodeURIComponent(
+            (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ''])[1]
+            .replace(/\+/g, '%20')
+        ) || null;
     }
 
     var demoObj = {
-        'subject': [],
-        'gradelevel': []
+        subject    : [],
+        gradelevel : []
     };
 
-    return function(callback) {
+    function fetchSelected ( paramObj ) {
+        if ( paramObj ) {
+            return JSON.parse( paramObj );
+        }
+        return [];
+    }
+
+    function linq(obj){
+        return Enumerable.From(obj);
+    }
+
+    return function ( callback ) {
         $.ajax({
-            url: "http://zubu.cloudapp.net:8888/subjects.json?ts=" + (new Date().getTime()),
-            type: "GET",
-            dataType: "json",
-            success: function(data) {
+            url      : 'http://zubu.cloudapp.net:8888/subjects.json?ts=' + (new Date().getTime()),
+            type     : 'GET',
+            dataType : 'json',
+            success  : function(data) {
+
+                demoObj.subject = fetchSelected(getURLParameter('sub'));
+                demoObj.gradelevel = fetchSelected(getURLParameter('gra'));
+
+                // for (var i in demoObj.subject) {
+                //     demoObj.subject[i] = data.subjects[demoObj.subject[i]].toLowerCase();
+                // }
+                // for (var i in demoObj.gradelevel) {
+                //     demoObj.gradelevel[i] = data.grades[demoObj.gradelevel[i]].toLowerCase();
+                // }
+
                 console.log(data);
-
-                var sub = getURLParameter('sub');
-                var gra = getURLParameter('gra');
-
-                //for demo only eval() will be removed
-                if (sub) {
-                    eval("demoObj.subject = " + sub + ";");
-                }
-                if (gra) {
-                    eval("demoObj.gradelevel = " + gra + ";");
-                }
-
-                for (var i in demoObj.subject) {
-                    demoObj.subject[i] = data.subjects[demoObj.subject[i]].toLowerCase();
-                }
-                for (var i in demoObj.gradelevel) {
-                    demoObj.gradelevel[i] = data.grades[demoObj.gradelevel[i]].toLowerCase();
-                }
-
-                console.log(demoObj);
+                console.log(linq(data.subjects).Select(function(obj){ return obj; }).ToArray());
 
                 callback(demoObj);
             },
             error: function(err) {}
         });
-    }
+    };
 });
 /**
     Recommendation Architecture
@@ -20109,7 +20103,7 @@ define('utilities/videos/Recommend',['require','async','utilities/videos/FilterD
 
     };
 });
-define( 'controllers/AppController',['require','underscore','jquery','backbone','marionette','async','collections/videos/VideosCollection','views/videos/VideosLayout','views/videos/VideosListView','views/videos/VideoItemView','views/ErrorView','utilities/videos/Recommend'],function ( require ) {
+define( 'controllers/AppController',['require','underscore','jquery','backbone','marionette','async','collections/videos/VideoCollection','views/videos/VideosLayout','views/videos/VideosListView','views/videos/VideoItemView','views/ErrorView','utilities/videos/Recommend'],function ( require ) {
 	'use strict';
 
 	var _           = require( 'underscore' );
@@ -20120,7 +20114,7 @@ define( 'controllers/AppController',['require','underscore','jquery','backbone',
 
 	var applications = {};
 	var collections  = {
-		'VideosCollection' : require( 'collections/videos/VideosCollection' )
+		'VideoCollection' : require( 'collections/videos/VideoCollection' )
 	};
 	var components   = {};
 	var layouts      = {
@@ -20143,12 +20137,12 @@ define( 'controllers/AppController',['require','underscore','jquery','backbone',
 		},
 
 		'showDefault' : function ( actions ) {
-			var layout = this._setContent( layouts.VideosLayout );
+			var _layout = this._setContent( layouts.VideosLayout );
 
-			util(function(data){
-				var collection = new collections.VideosCollection(data)
+			util( function( data ) {
+				var collection = new collections.VideoCollection( data );
 				var videosView = new views.VideosListView( { 'collection' : collection } );
-				layout.videos.show( videosView );
+				_layout.videos.show( videosView );
 			});
 		},
 
@@ -20159,7 +20153,7 @@ define( 'controllers/AppController',['require','underscore','jquery','backbone',
 			var view;
 			if ( typeof View === 'function' ) {
 				options = options || {};
-				view = new View( options );
+				view    = new View( options );
 			} else {
 				view = View;
 			}

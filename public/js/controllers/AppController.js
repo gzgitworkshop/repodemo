@@ -32,12 +32,12 @@ define( function ( require ) {
 		},
 
 		'showDefault' : function ( actions ) {
-			var layout = this._setContent( layouts.VideosLayout );
+			var _layout = this._setContent( layouts.VideosLayout );
 
-			util(function(data){
-				var collection = new collections.VideosCollection(data)
+			util( function( data ) {
+				var collection = new collections.VideoCollection( data );
 				var videosView = new views.VideosListView( { 'collection' : collection } );
-				layout.videos.show( videosView );
+				_layout.videos.show( videosView );
 			});
 		},
 
@@ -48,7 +48,7 @@ define( function ( require ) {
 			var view;
 			if ( typeof View === 'function' ) {
 				options = options || {};
-				view = new View( options );
+				view    = new View( options );
 			} else {
 				view = View;
 			}

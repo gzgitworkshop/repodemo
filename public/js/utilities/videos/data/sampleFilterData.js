@@ -1,7 +1,7 @@
-define(function (require) {
+define( function ( require ) {
     'use strict';
 
-    return function (callback) {
-        callback(['data1', 'data2', 'data3']);
+    return function ( callback ) {
+        callback( [ 'data1', 'data2', 'data3' ] );
     };
 });
