@@ -19926,10 +19926,19 @@ define('utilities/videos/filters/gradeFilter',['require','utilities/videos/Recom
 
     return gradeFilter;
 });
-define( 'utilities/videos/data/userFilterData',['require','http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js'],function( require ) {
+define('utilities/videos/Linq',['require','http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js'],function(require) {
     'use strict';
 
     require('http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js');
+
+    return function(obj) {
+        return Enumerable.From(obj);
+    };
+});
+define( 'utilities/videos/data/userFilterData',['require','utilities/videos/Linq'],function( require ) {
+    'use strict';
+
+    var linq = require('utilities/videos/Linq');
 
     function getURLParameter( name ) {
         return decodeURIComponent(
@@ -19950,10 +19959,6 @@ define( 'utilities/videos/data/userFilterData',['require','http://cdn.bootcss.co
         return [];
     }
 
-    function linq(obj){
-        return Enumerable.From(obj);
-    }
-
     return function ( callback ) {
         $.ajax({
             url      : 'http://zubu.cloudapp.net:8888/subjects.json?ts=' + (new Date().getTime()),
@@ -19971,8 +19976,10 @@ define( 'utilities/videos/data/userFilterData',['require','http://cdn.bootcss.co
                 //     demoObj.gradelevel[i] = data.grades[demoObj.gradelevel[i]].toLowerCase();
                 // }
 
-                console.log(data);
-                console.log(linq(data.subjects).Select(function(obj){ return obj; }).ToArray());
+                demoObj.subject = linq(demoObj.subject).Select(function(obj){ return data.subjects[obj]; }).ToArray();
+                demoObj.gradelevel = linq(demoObj.gradelevel).Select(function(obj){ return data.grades[obj]; }).ToArray();
+
+                console.log(demoObj);
 
                 callback(demoObj);
             },

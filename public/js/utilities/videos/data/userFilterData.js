@@ -1,7 +1,7 @@
 define( function( require ) {
     'use strict';
 
-    require('http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js');
+    var linq = require('utilities/videos/Linq');
 
     function getURLParameter( name ) {
         return decodeURIComponent(
@@ -22,10 +22,6 @@ define( function( require ) {
         return [];
     }
 
-    function linq(obj){
-        return Enumerable.From(obj);
-    }
-
     return function ( callback ) {
         $.ajax({
             url      : 'http://zubu.cloudapp.net:8888/subjects.json?ts=' + (new Date().getTime()),
@@ -43,8 +39,8 @@ define( function( require ) {
                 //     demoObj.gradelevel[i] = data.grades[demoObj.gradelevel[i]].toLowerCase();
                 // }
 
-                console.log(data);
-                console.log(linq(data.subjects).Select( obj => obj ).ToArray());
+                demoObj.subject = linq(demoObj.subject).Select(function(obj){ return data.subjects[obj]; }).ToArray();
+                demoObj.gradelevel = linq(demoObj.gradelevel).Select(function(obj){ return data.grades[obj]; }).ToArray();
 
                 callback(demoObj);
             },
