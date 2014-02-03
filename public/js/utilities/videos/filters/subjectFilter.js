@@ -1,41 +1,41 @@
-define(function(require) {
-    'use strict';
+define( function ( require ) {
+	'use strict';
 
-    var subjectFilter = new(require('utilities/videos/RecommendLogic'))();
-    var utility = require('utilities/videos/Utility');
+	var SubjectFilter = new ( require( 'utilities/videos/RecommendLogic' ) )();
+	var utility       = require( 'utilities/videos/Utility' );
 
-    function logger(sMsg) {
-        console.log(sMsg);
-    }
+	function logger ( sMsg ) {
+		console.log( sMsg );
+	}
 
-    subjectFilter.setExecuteMessage('Executing Subject Filter');
+	SubjectFilter.setExecuteMessage( 'Executing Subject Filter' );
 
-    subjectFilter.filter = function(videoData, filterData, callback) {
+	SubjectFilter.filter = function ( videoData, filterData, callback ) {
 
-        var arFilterSubj = filterData['UserData'].subject;
+		var arFilterSubj = filterData[ 'UserData' ].subject;
 
-        try {
-            utility.filter(videoData, arFilterSubj, 'subject', function(arResults) {
+		try {
+			utility.filter( videoData, arFilterSubj, 'subject', function ( arResults ) {
 
-                if (!arResults) {
-                    return callback([]);
-                }
+				if ( !arResults ) {
+					return callback( [] );
+				}
 
-                logger('Fetched filtered data');
+				logger( 'Fetched filtered data' );
 
-                //change videoData.raw reference to arHandler
-                videoData.raw = null;
-                videoData.raw = arResults;
+				//change videoData.raw reference to arHandler
+				videoData.raw = null;
+				videoData.raw = arResults;
 
-                callback(videoData);
+				callback( videoData );
 
-            });
-        } catch (err) {
-            logger(err);
-            callback([]);
-        }
+			} );
+		} catch ( err ) {
+			logger( err );
+			callback( [] );
+		}
 
-    };
+	};
 
-    return subjectFilter;
-});
+	return SubjectFilter;
+} );

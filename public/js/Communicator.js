@@ -1,8 +1,8 @@
 define( function ( require ) {
-    'use strict';
+	'use strict';
 
-    var Backbone   = require( 'backbone' );
-    var Marionette = require( 'marionette' );
+	var Backbone  = require( 'backbone' );
+	var Marionette = require( 'marionette' );
 
 	var Communicator = Marionette.Controller.extend( {
 		'initialize' : function () {
@@ -11,10 +11,10 @@ define( function ( require ) {
 			this.mediator = new Backbone.Wreqr.EventAggregator();
 
 			//create a req/res
-			this.reqres   = new Backbone.Wreqr.RequestResponse();
+			this.reqres  = new Backbone.Wreqr.RequestResponse();
 
 			// create commands
-			this.command  = new Backbone.Wreqr.Commands();
+			this.command = new Backbone.Wreqr.Commands();
 		}
 	} );
 	return new Communicator();

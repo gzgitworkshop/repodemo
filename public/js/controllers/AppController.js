@@ -32,13 +32,13 @@ define( function ( require ) {
 		},
 
 		'showDefault' : function ( actions ) {
-			var _layout = this._setContent( layouts.VideosLayout );
+			var layout = this._setContent( layouts.VideosLayout );
 
-			util( function( data ) {
+			util( function ( data ) {
 				var collection = new collections.VideoCollection( data );
 				var videosView = new views.VideosListView( { 'collection' : collection } );
-				_layout.videos.show( videosView );
-			});
+				layout.videos.show( videosView );
+			} );
 		},
 
 

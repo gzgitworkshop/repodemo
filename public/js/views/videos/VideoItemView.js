@@ -3,6 +3,7 @@ define( function ( require ) {
 
 	var Marionette = require( 'marionette' );
 	var _          = require( 'underscore' );
+	var $          = require( 'jquery' );
 	var template   = require( 'text!templates/videos/videoItemView.html' );
 
 	return Marionette.ItemView.extend( {
@@ -14,21 +15,21 @@ define( function ( require ) {
 		'ui'       : {},
 		'events'   : {},
 
-		'tagName'  : 'li',
-		'id' 	   : '5',
-		'className': 'grid-box vid-thumb',
+		'tagName'   : 'li',
+		'id'        : '5',
+		'className' : 'grid-box vid-thumb',
 
-		templateHelpers: function(){
-			var model = this.model.attributes
+		templateHelpers : function () {
+			var model = this.model.attributes;
 			return {
 				imageUrl : model.imageUrl,
-				topic : model.topic,
+				topic    : model.topic,
 				duration : model.duration
-			}
+			};
 		},
 
 		'onRender' : function () {
-			$("#allCount").html(($("#allCount").html() * 1) + 1 )
+			$( '#all-count' ).html( ( $( '#all-count' ).html() * 1 ) + 1 );
 		}
 	} );
 

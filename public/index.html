@@ -1,71 +1,68 @@
 <!DOCTYPE html>
-<!--[if   IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if   IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if   gt IE 8]><!-->
+<!--[if  IE 7]>     <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if  IE 8]>     <html class="lt-ie9"> <![endif]-->
+<!--[if  gt IE 8]><!-->
 <html lang="en">
 <!--<![endif]-->
 
 <head>
-    <meta charset="utf-8">
-    <title>mema</title>
+	<meta charset="utf-8">
+	<title>mema</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="css/styles.min.css" rel="stylesheet" type="text/css">
-    <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <script src="js/libs/json2.js"></script>
-        <![endif]-->
-    <link href="css/custom/videos/styles.css" rel="stylesheet" type="text/css">
-    <style type="text/css">
-    </style>
+	<link href="css/styles.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="js/libs/json2.js"></script>
+	<![endif]-->
 </head>
 
 <body>
-    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!-- UNCOMMENT FOR DEMO/TESTING NEEDS -->
-    <!-- <div id="peek" class="ui-corner-bl" style="-webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; -ms-user-select: none;">
-        <div style="font-weight: bold;">SELECT USER TYPE
-            <button id="reLogin">LOGIN</button>
-        </div>
-        <hr />
-        <div style="font-weight: bold;">SUBJECTS</div>
-        <ul id="sublist">
-        </ul>
-        <hr />
-        <div style="font-weight: bold;">GRADE LEVELS</div>
-        <ul id="gradlist">
-        </ul>
-    </div> -->
-    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <div id="main-content" class="container-fluid"></div>
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<!-- UNCOMMENT FOR DEMO/TESTING NEEDS -->
+	<!-- <div id="peek" class="ui-corner-bl" style="-webkit-user-select: none; -moz-user-select: none; -khtml-user-select: none; -ms-user-select: none;">
+		<div style="font-weight: bold;">SELECT USER TYPE
+			<button id="reLogin">LOGIN</button>
+		</div>
+		<hr />
+		<div style="font-weight: bold;">SUBJECTS</div>
+		<ul id="sublist">
+		</ul>
+		<hr />
+		<div style="font-weight: bold;">GRADE LEVELS</div>
+		<ul id="gradlist">
+		</ul>
+	</div> -->
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<div id="main-content" class="container-fluid"></div>
 
-    <script src="js/libs/es5-shim/es5-shim.min.js"></script>
-    <script src="js/libs/respond/respond.min.js"></script>
-    <script src="js/libs/requirejs/require.min.js" data-main="js/main.min.js"></script>
-    <script src="js/require-config.js"></script>
+	<script src="js/libs/es5-shim/es5-shim.min.js"></script>
+	<script src="js/libs/respond/respond.min.js"></script>
+	<script src="js/libs/requirejs/require.min.js" data-main="js/main.min.js"></script>
+	<script src="js/require-config.js"></script>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!-- UNCOMMENT FOR DEMO/TESTING NEEDS -->
-    <!-- <script src="js/utilities/videos/demo.js"></script> -->
-    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <script type="text/javascript">
-    //THIS IS ONLY TO GET BY WITH THE IFRAME ISSUES OF THE PLATFORM, HOPEFULLY WE COULD REMOVE THIS SOON!
-    var isInIframe = true;
-    try {
-        var parentWindow = window.parent.document;
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<!-- UNCOMMENT FOR DEMO/TESTING NEEDS -->
+	<!-- <script src="js/utilities/videos/demo.js"></script> -->
+	<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+	<script type="text/javascript">
+	//THIS IS ONLY TO GET BY WITH THE IFRAME ISSUES OF THE PLATFORM, HOPEFULLY WE COULD REMOVE THIS SOON!
+	var isInIframe = true;
+	try {
+		var parentWindow = window.parent.document;
 
-        $(window.document).ready(function() {
-            $('#main-content.container', parentWindow).removeClass('container').addClass('container-fluid');
-            $('#resource-content', parentWindow).removeClass('container').removeClass('span12').addClass('container-fluid');
-            $('iframe#resource-app', parentWindow).addClass('container-fluid');
-            $('#main-content.container').removeClass('container').addClass('container-fluid');
-        });
+		$(window.document).ready(function() {
+			$('#main-content.container', parentWindow).removeClass('container').addClass('container-fluid');
+			$('#resource-content', parentWindow).removeClass('container').removeClass('span12').addClass('container-fluid');
+			$('iframe#resource-app', parentWindow).addClass('container-fluid');
+			$('#main-content.container').removeClass('container').addClass('container-fluid');
+		});
 
-        isInIframe = window.self !== window.top;
-    } catch (err) {}
-    </script>
+		isInIframe = window.self !== window.top;
+	} catch (err) {}
+	</script>
 </body>
 
 </html>

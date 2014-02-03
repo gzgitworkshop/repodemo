@@ -19467,7 +19467,7 @@ define( 'models/videos/VideoModel',['require','backbone'],function ( require ) {
 define( 'collections/videos/VideoCollection',['require','backbone','models/videos/VideoModel'],function ( require ) {
 	'use strict';
 
-	var Backbone = require( 'backbone' );
+	var Backbone   = require( 'backbone' );
 	var Videomodel = require( 'models/videos/VideoModel' );
 
 	return Backbone.Collection.extend( {
@@ -19479,33 +19479,33 @@ define( 'collections/videos/VideoCollection',['require','backbone','models/video
 } );
 
 define('text',{load: function(id){throw new Error("Dynamic load not allowed: " + id);}});
-define('text!templates/videos/videosLayout.html',[],function () { return '<div class="wide-container-fluid resources">\n    <div class="resource-list-heading">\n\t<h2>Recommendeds (<span id="allCount">0</span>)</h2>\n        <a class="view-more" href="#">View 0 more<img src="img/view-more-arrow.png"></a>\n    </div>\n    <div id="videos"></div>\n</div>';});
+define('text!templates/videos/videosLayout.html',[],function () { return '<div class="wide-container-fluid resources">\n\t\t<div class="resource-list-heading">\n\t<h2>Recommendeds (<span id="all-count">0</span>)</h2>\n\t\t\t\t<a class="view-more" href="#">View 0 more<img src="img/view-more-arrow.png"></a>\n\t\t</div>\n\t\t<div id="videos"></div>\n</div>';});
 
-define('views/videos/VideosLayout',['require','marionette','underscore','text!templates/videos/videosLayout.html'],function(require) {
-    'use strict';
-
-    var Marionette = require('marionette');
-    var _ = require('underscore');
-    var template = require('text!templates/videos/videosLayout.html');
-
-    return Marionette.Layout.extend({
-
-        'initialize': function(options) {},
-
-        'template': _.template(template),
-        'regions': {
-            'videos': '#videos'
-        }
-    });
-
-});
-define('text!templates/videos/videoItemView.html',[],function () { return '<a class="play-now play-now5" href="video-player.html" style="display: none;">\n    <img src="img/play-now.png">\n</a>\n<a class="watch-later watch-later5" href="success.html" style="display: none;">\n    <img src="img/watch-later.png">\n</a>\n<a class="vid-thumb-overlay" href="video-player.html">\n    <div class="vid-thumb-bg vid-thumb-bg5">\n        <img src=<%= imageUrl %> style="opacity: 1;">\n    </div>\n</a>\n<h3><%= topic %></h3>\n<p><%= duration %></p>';});
-
-define( 'views/videos/VideoItemView',['require','marionette','underscore','text!templates/videos/videoItemView.html'],function ( require ) {
+define( 'views/videos/VideosLayout',['require','marionette','underscore','text!templates/videos/videosLayout.html'],function ( require ) {
 	'use strict';
 
 	var Marionette = require( 'marionette' );
 	var _          = require( 'underscore' );
+	var template   = require( 'text!templates/videos/videosLayout.html' );
+
+	return Marionette.Layout.extend( {
+
+		'initialize' : function ( options ) {},
+		'template'   : _.template( template ),
+		'regions'    : {
+			'videos' : '#videos'
+		}
+	} );
+
+} );
+define('text!templates/videos/videoItemView.html',[],function () { return '<a class="play-now play-now5" href="video-player.html" style="display: none;">\n\t\t<img src="img/play-now.png">\n</a>\n<a class="watch-later watch-later5" href="success.html" style="display: none;">\n\t\t<img src="img/watch-later.png">\n</a>\n<a class="vid-thumb-overlay" href="video-player.html">\n\t\t<div class="vid-thumb-bg vid-thumb-bg5">\n\t\t\t\t<img src=<%= imageUrl %> style="opacity: 1;">\n\t\t</div>\n</a>\n<h3><%= topic %></h3>\n<p><%= duration %></p>';});
+
+define( 'views/videos/VideoItemView',['require','marionette','underscore','jquery','text!templates/videos/videoItemView.html'],function ( require ) {
+	'use strict';
+
+	var Marionette = require( 'marionette' );
+	var _          = require( 'underscore' );
+	var $          = require( 'jquery' );
 	var template   = require( 'text!templates/videos/videoItemView.html' );
 
 	return Marionette.ItemView.extend( {
@@ -19517,21 +19517,21 @@ define( 'views/videos/VideoItemView',['require','marionette','underscore','text!
 		'ui'       : {},
 		'events'   : {},
 
-		'tagName'  : 'li',
-		'id' 	   : '5',
-		'className': 'grid-box vid-thumb',
+		'tagName'   : 'li',
+		'id'        : '5',
+		'className' : 'grid-box vid-thumb',
 
-		templateHelpers: function(){
-			var model = this.model.attributes
+		templateHelpers : function () {
+			var model = this.model.attributes;
 			return {
 				imageUrl : model.imageUrl,
-				topic : model.topic,
+				topic    : model.topic,
 				duration : model.duration
-			}
+			};
 		},
 
 		'onRender' : function () {
-			$("#allCount").html(($("#allCount").html() * 1) + 1 )
+			$( '#all-count' ).html( ( $( '#all-count' ).html() * 1 ) + 1 );
 		}
 	} );
 
@@ -19568,548 +19568,547 @@ define( 'views/ErrorView',['require','underscore','marionette','text!templates/e
 	} );
 } );
 /**
-    Filter Data
-    Author : Joseph Panuncillo
-    Last Date Modified : 1/22/14
+Filter Data
+Author : Joseph Panuncillo
+Last Date Modified : 1/22/14
 
-    @Description  Prototype for Filter Data
+@Description Prototype for Filter Data
 */
 define( 'utilities/videos/FilterData',['require'],function ( require ) {
-    'use strict';
+	'use strict';
 
-    /**
-     * Object that wraps new filter logics to make it usable by the system
-     * @param string executeMessage Message display when filter logic is executed
-     */
-    /** Object that provides methods for adding new filter data */
-    var filterData = function () {
-        this.filterDataCollection = {};
-    };
-    filterData.prototype = {
-        /**
-         * add new filter data
-         * @param  string key                   object ID
-         * @param  function newFilterDataObject object that returns the new filter data
-         */
-        regFilterDataObject: function ( key, newFilterDataObject ) {
-            this.filterDataCollection[key] = newFilterDataObject;
-        },
-        getFilterData: function () {
-            return this.filterDataCollection;
-        }
-    };
+	/**
+	 * Object that wraps new filter logics to make it usable by the system
+	 * @param string executeMessage Message display when filter logic is executed
+	 */
+	/** Object that provides methods for adding new filter data */
+	var FilterData = function () {
+		this.filterDataCollection = {};
+	};
 
-    return new filterData();
-});
+	FilterData.prototype = {
+		/**
+		 * add new filter data
+		 * @param string key          object ID
+		 * @param function newFilterDataObject object that returns the new filter data
+		 */
+		'regFilterDataObject' : function ( key, newFilterDataObject ) {
+			this.filterDataCollection[ key ] = newFilterDataObject;
+		},
+		'getFilterData' : function () {
+			return this.filterDataCollection;
+		}
+	};
+
+	return new FilterData();
+} );
 /**
-    Recommendation System
-    Author : Joseph Panuncillo
-    Last Date Modified : 1/22/14
+Recommendation System
+Author : Joseph Panuncillo
+Last Date Modified : 1/22/14
 
-    @Description  Prototype for Recommendation System
+@Description Prototype for Recommendation System
 */
-define('utilities/videos/RecommendationSystem',['require','async'],function (require) {
-    'use strict';
+define( 'utilities/videos/RecommendationSystem',['require','async'],function ( require ) {
+	'use strict';
 
-    var async = require('async');
+	var async = require( 'async' );
 
-    /**
-     * internal messaging, to be able to turn messaging on/off and where to display w/o scouring the source code
-     * @param  string message
-     */
+	/**
+	 * internal messaging, to be able to turn messaging on/off and where to display w/o scouring the source code
+	 * @param string message
+	 */
 
-    function logger(message) {
-        //alert(message);
-        //console.log(message);
-    }
+	function logger ( message ) {
+		//alert(message);
+		//console.log(message);
+	}
 
-    /** Object that provides methods for adding new filter logic */
-    var RECOMMENDATION_SYSTEM = function () {
-        this.recommendationLogicCollection = [];
-        this.videoData = [];
-        this.filterData = [];
-    };
-    RECOMMENDATION_SYSTEM.prototype = {
-        /**
-         * adds new recommendation/filter logic
-         * @param  RECOMMENDATION_LOGIC instance that contains new recommendation/filter
-         */
-        regRecommendationLogic: function (newRecommendationLogic) {
-            this.recommendationLogicCollection.push(newRecommendationLogic);
-        },
-        /**
-         * provide video data and filter data needed by the recommendation/filter execution
-         * @param object[] filterData  list of video data/meta
-         * @param object[] videoData    map of distinct filter data
-         */
-        setParameters: function (videoData, filterData) {
-            this.videoData = videoData.videoData;
-            this.filterData = filterData.filterData;
-        },
-        setVideoData: function (newVideoData) {
-            this.videoData = newVideoData;
-        },
-        getVideoData: function () {
-            return this.videoData;
-        },
-        getFilterData: function () {
-            return this.filterdata;
-        },
-        /**
-         * Calls all recommendation/filter objects, executes each and the output replaces video data every iteration
-         * @return final video data
-         */
-        execute: function () {
-            var videoData = this.videoData;
-            var filterData = this.filterData;
-            logger(videoData);
+	/** Object that provides methods for adding new filter logic */
+	var RecommendationSystem = function () {
+		this.recommendationLogicCollection = [];
+		this.videoData                     = [];
+		this.filterData                    = [];
+	};
 
-            async.forEach(this.recommendationLogicCollection, function (obj, callback) {
-                logger(obj.executeMessage);
-                obj.filter(videoData, filterData, function (outputVideoData) {
-                    videoData = outputVideoData;
-                });
-                logger(videoData);
-            }, function (err) {
-                logger(videoData);
-            });
+	RecommendationSystem.prototype = {
+		/**
+		 * adds new recommendation/filter logic
+		 * @param RECOMMENDATION_LOGIC instance that contains new recommendation/filter
+		 */
+		'regRecommendationLogic' : function ( newRecommendationLogic ) {
+			this.recommendationLogicCollection.push( newRecommendationLogic );
+		},
+		/**
+		 * provide video data and filter data needed by the recommendation/filter execution
+		 * @param object[] filterData list of video data/meta
+		 * @param object[] videoData  map of distinct filter data
+		 */
+		'setParameters' : function ( videoData, filterData ) {
+			this.videoData  = videoData.videoData;
+			this.filterData = filterData.filterData;
+		},
+		'setVideoData' : function ( newVideoData ) {
+			this.videoData = newVideoData;
+		},
+		'getVideoData' : function () {
+			return this.videoData;
+		},
+		'getFilterData' : function () {
+			return this.filterdata;
+		},
+		/**
+		 * Calls all recommendation/filter objects, executes each and the output replaces video data every iteration
+		 * @return final video data
+		 */
+		'execute' : function () {
+			var videoData  = this.videoData;
+			var filterData = this.filterData;
+			logger( videoData );
 
-            return videoData;
-        }
-    };
+			async.forEach( this.recommendationLogicCollection, function ( obj, callback ) {
+				logger( obj.executeMessage );
+				obj.filter( videoData, filterData, function ( outputVideoData ) {
+					videoData = outputVideoData;
+				} );
+				logger( videoData );
+			}, function( err ) {
+				logger( videoData );
+			} );
 
-    return new RECOMMENDATION_SYSTEM();
-});
-define('utilities/videos/data/videoInfoSource',['require','models/videos/VideoModel'],function(require) {
-    'use strict';
+			return videoData;
+		}
+	};
 
-    var models = {
-        'VideoModel': require('models/videos/VideoModel')
-    };
+	return new RecommendationSystem();
+} );
+define( 'utilities/videos/data/videoInfoSource',['require','jquery','models/videos/VideoModel'],function ( require ) {
+	'use strict';
 
-    return function(callback) {
-        $.ajax({
-            url: 'http://zubu.cloudapp.net:8888/videoInfo1.json?ts=' + (new Date().getTime()),
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                var videoData = [];
+	var $      = require( 'jquery' );
+	var models = {
+		'VideoModel': require( 'models/videos/VideoModel' )
+	};
 
-                for (var objIndex in data) {
-                    var obj = data[objIndex];
-                    videoData.push(new models.VideoModel({
-                        _id: obj._id,
-                        imageUrl: obj.imageUrl,
-                        topic: obj.topic,
-                        duration: obj.duration,
-                        tags: obj.tags
-                    }));
-                }
-                callback(videoData);
-            },
-            error: function(xhr, status, error) {
-                callback([]);
-            }
-        });
-    };
-});
+	return function ( callback ) {
+		$.ajax( {
+			url: 'http://zubu.cloudapp.net:8888/videoInfo1.json?ts=' + ( new Date().getTime() ),
+			type: 'GET',
+			dataType: 'json',
+			success: function( data ) {
+				var videoData = [];
+
+				for ( var objIndex in data ) {
+					var obj = data[ objIndex ];
+					videoData.push( new models.VideoModel( {
+						_id      : obj._id,
+						imageUrl : obj.imageUrl,
+						topic    : obj.topic,
+						duration : obj.duration,
+						tags     : obj.tags
+					} ) );
+				}
+				callback( videoData );
+			},
+			error: function( xhr, status, error ) {
+				callback( [] );
+			}
+		} );
+	};
+} );
 /**
-    Recommendation Logic
-    Author : Joseph Panuncillo
-    Last Date Modified : 1/22/14
+	Recommendation Logic
+	Author : Joseph Panuncillo
+	Last Date Modified : 1/22/14
 
-    @Description  Prototype for Recommendation Logic
+	@Description Prototype for Recommendation Logic
 
 */
-define('utilities/videos/RecommendLogic',['require'],function (require) {
-    'use strict';
+define( 'utilities/videos/RecommendLogic',['require'],function ( require ) {
+	'use strict';
 
-    /**
-     * Object that wraps new filter logics to make it usable by the system
-     * @param string executeMessage Message display when filter logic is executed
-     */
-    var RECOMMENDATION_LOGIC = function () {
-        //this.executeMessage = executeMessage;
-    };
-    RECOMMENDATION_LOGIC.prototype = {
-        /**
-         * function to be overridden to contain new recommendation/filter logic
-         * @param object[] filterData  list of video data/meta
-         * @param object[] videoData   map of distinct filter data
-         * @return object[] ist of video data/meta
-         */
-        filter: function (videoData, filterdata, callback) {
-            //do nothing
-        },
-        setExecuteMessage: function (executeMessage) {
-            this.executeMessage = executeMessage;
-        }
-    };
+	/**
+	 * Object that wraps new filter logics to make it usable by the system
+	 * @param string executeMessage Message display when filter logic is executed
+	 */
+	var RecommendationLogic = function () {
+		//this.executeMessage = executeMessage;
+	};
 
-    return RECOMMENDATION_LOGIC;
-});
+	RecommendationLogic.prototype = {
+		/**
+		 * function to be overridden to contain new recommendation/filter logic
+		 * @param object[] filterData list of video data/meta
+		 * @param object[] videoData  map of distinct filter data
+		 * @return object[] ist of video data/meta
+		 */
+		'filter' : function ( videoData, filterdata, callback ) {
+			//do nothing
+		},
+		'setExecuteMessage' : function ( executeMessage ) {
+			this.executeMessage = executeMessage;
+		}
+	};
+
+	return RecommendationLogic;
+} );
 /**
-    Recommendation Architecture
-    Author :
-    Last Date Modified :
+Recommendation Architecture
+Author :
+Last Date Modified :
 
-    @Description  Generic utility functions or tools.
- **/
-
-define('utilities/videos/Utility',['require','async'],function (require) {
-    'use strict';
-
-    var async = require('async');
-
-    var NOT_FOUND = -1;
-
-    function logger(sMsg) {
-		// console.log(sMsg);
-    }
-
-    var UTILITY = function () {
-    };
-
-    UTILITY.prototype = {
-/**
-* Returns an array of objects to the callback function basing from the filter data input
-* @params videoData {Object}
-* @params filterData {Array}
+@Description Generic utility functions or tools.
 **/
 
-		filter : function( videoData, filterData, sFilterType, callback ) {
+define( 'utilities/videos/Utility',['require','async','jquery'],function ( require ) {
+	'use strict';
 
-			if(videoData === null || filterData === null) {
+	var async     = require( 'async' );
+	var $         = require( 'jquery' );
+	var NOT_FOUND = -1;
 
-				return callback(null);
+	function logger ( sMsg ) {
+		// console.log(sMsg);
+	}
+
+	var Utility = function () {};
+
+	Utility.prototype = {
+		/**
+		 * Returns an array of objects to the callback function basing from the filter data input
+		 * @params videoData {Object}
+		 * @params filterData {Array}
+		 **/
+
+		'filter' : function( videoData, filterData, sFilterType, callback ) {
+
+			if ( videoData === null || filterData === null ) {
+
+				return callback( null );
 			}
-/**
-* TODO: optimize the code below or change the code below into a more 'english' code
-* research some other techniques in filtering where filter data input is an array and
-* data to be filtered is also an array
-*/
+			/**
+			 * TODO: optimize the code below or change the code below into a more 'english' code
+			 * research some other techniques in filtering where filter data input is an array and
+			 * data to be filtered is also an array
+			 */
 			//handler of videos to be filtered in each iteration of filtered data arrays
 			var arVideoRaw = videoData.raw;
 
-			if(!filterData || !filterData.length) {
-				return callback(videoData.raw);
+			if ( !filterData || !filterData.length ) {
+				return callback( videoData.raw );
 
 			} else {
 				//handler of unfiltered vids - feed to second loop
-				var arVideoHandler = [];
+				var arVideoHandler  = [];
 				//handler of filtered vids
 				var arFilterHandler = [];
 
-				async.forEach(filterData , function(obj, filtercallback) {
+				async.forEach( filterData, function ( obj, filtercallback ) {
 
-					var sFilter = obj.toString();
+					var sFilter    = obj.toString();
 					arVideoHandler = null;
 					arVideoHandler = [];
 
-					async.forEach( arVideoRaw, function(obj, videocallback){
+					async.forEach( arVideoRaw, function ( obj, videocallback ) {
 
-						var arTags = obj.attributes.tags[sFilterType];
+						var arTags = obj.attributes.tags[ sFilterType ];
 
-						if( $.inArray( sFilter , arTags ) !== NOT_FOUND) { //found
-							arFilterHandler.push(obj);//filtered
+						if ( $.inArray( sFilter, arTags ) !== NOT_FOUND ) { //found
+							arFilterHandler.push( obj ); //filtered
 						} else {
-							arVideoHandler.push(obj);//unfiltered
+							arVideoHandler.push( obj ); //unfiltered
 						}
 
-					} , function ( err ) {
+					}, function ( err ) {
 						if ( err ) {
 							logger( err );
 						} else {
 							logger( 'Video loop done' );
 						}
-					});
+					} );
 
 					arVideoRaw = null;
 					arVideoRaw = arVideoHandler;
-					filtercallback(  );
+					filtercallback();
 
-				} , function ( err ) {
+				}, function ( err ) {
 					if ( err ) {
 						logger( err );
 					} else {
 						logger( 'Filter data loop done' );
 						callback( arFilterHandler );
 					}
-				});
+				} );
 
 			}
 
 		}
 
-    }
+	};
 
-    return new UTILITY();
-});
-define('utilities/videos/filters/subjectFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function(require) {
-    'use strict';
+	return new Utility();
+} );
+define( 'utilities/videos/filters/subjectFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function ( require ) {
+	'use strict';
 
-    var subjectFilter = new(require('utilities/videos/RecommendLogic'))();
-    var utility = require('utilities/videos/Utility');
+	var SubjectFilter = new ( require( 'utilities/videos/RecommendLogic' ) )();
+	var utility       = require( 'utilities/videos/Utility' );
 
-    function logger(sMsg) {
-        console.log(sMsg);
-    }
+	function logger ( sMsg ) {
+		console.log( sMsg );
+	}
 
-    subjectFilter.setExecuteMessage('Executing Subject Filter');
+	SubjectFilter.setExecuteMessage( 'Executing Subject Filter' );
 
-    subjectFilter.filter = function(videoData, filterData, callback) {
+	SubjectFilter.filter = function ( videoData, filterData, callback ) {
 
-        var arFilterSubj = filterData['UserData'].subject;
+		var arFilterSubj = filterData[ 'UserData' ].subject;
 
-        try {
-            utility.filter(videoData, arFilterSubj, 'subject', function(arResults) {
+		try {
+			utility.filter( videoData, arFilterSubj, 'subject', function ( arResults ) {
 
-                if (!arResults) {
-                    return callback([]);
-                }
+				if ( !arResults ) {
+					return callback( [] );
+				}
 
-                logger('Fetched filtered data');
+				logger( 'Fetched filtered data' );
 
-                //change videoData.raw reference to arHandler
-                videoData.raw = null;
-                videoData.raw = arResults;
+				//change videoData.raw reference to arHandler
+				videoData.raw = null;
+				videoData.raw = arResults;
 
-                callback(videoData);
+				callback( videoData );
 
-            });
-        } catch (err) {
-            logger(err);
-            callback([]);
-        }
+			} );
+		} catch ( err ) {
+			logger( err );
+			callback( [] );
+		}
 
-    };
+	};
 
-    return subjectFilter;
-});
-define('utilities/videos/filters/gradeFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function(require) {
-    'use strict';
+	return SubjectFilter;
+} );
+define( 'utilities/videos/filters/gradeFilter',['require','utilities/videos/RecommendLogic','utilities/videos/Utility'],function ( require ) {
+	'use strict';
 
-    var gradeFilter = new(require('utilities/videos/RecommendLogic'))();
-    var utility = require('utilities/videos/Utility');
+	var gradeFilter = new( require( 'utilities/videos/RecommendLogic' ) )();
+	var utility = require( 'utilities/videos/Utility' );
 
-    function logger(sMsg) {
-        console.log(sMsg);
-    }
+	function logger( sMsg ) {
+		console.log( sMsg );
+	}
 
-    gradeFilter.setExecuteMessage('Executing Grade Filter');
+	gradeFilter.setExecuteMessage( 'Executing Grade Filter' );
 
-    gradeFilter.filter = function(videoData, filterdata, callback) {
+	gradeFilter.filter = function ( videoData, filterdata, callback ) {
 
-        var arFilterGrade = filterdata['UserData'].gradelevel;
+		var arFilterGrade = filterdata[ 'UserData' ].gradelevel;
 
-        try {
-            utility.filter(videoData, arFilterGrade, 'gradelevel', function(arResults) {
+		try {
+			utility.filter( videoData, arFilterGrade, 'gradelevel', function ( arResults ) {
 
-                if (!arResults) {
-                    logger('Empty results');
-                    return callback([]);
-                }
+				if ( !arResults ) {
+					logger( 'Empty results' );
+					return callback( [] );
+				}
 
-                logger('Fetched filtered data');
+				logger( 'Fetched filtered data' );
 
-                //change videoData.raw reference to arHandler
-                videoData.raw = null;
-                videoData.raw = arResults;
-                callback(videoData);
+				//change videoData.raw reference to arHandler
+				videoData.raw = null;
+				videoData.raw = arResults;
+				callback( videoData );
 
-            });
-        } catch (err) {
-            logger(err);
-            callback([]);
-        }
-    };
+			} );
+		} catch ( err ) {
+			logger( err );
+			callback( [] );
+		}
+	};
 
-    return gradeFilter;
-});
-define('utilities/videos/Linq',['require','http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js'],function(require) {
-    'use strict';
+	return gradeFilter;
+} );
+define( 'utilities/videos/Linq',['require','http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js'],function ( require ) {
+	'use strict';
 
-    require('http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js');
+	require( 'http://cdn.bootcss.com/linq.js/2.2.0.2/linq.js' );
 
-    return function(obj) {
-        return Enumerable.From(obj);
-    };
-});
-define( 'utilities/videos/data/userFilterData',['require','utilities/videos/Linq'],function( require ) {
-    'use strict';
+	return function ( obj ) {
+		return Enumerable.From( obj );
+	};
+} );
+define( 'utilities/videos/data/userFilterData',['require','utilities/videos/Linq','jquery'],function( require ) {
+	'use strict';
 
-    var linq = require('utilities/videos/Linq');
+	var linq   = require( 'utilities/videos/Linq' );
+  var $      = require( 'jquery' );
 
-    function getURLParameter( name ) {
-        return decodeURIComponent(
-            (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ''])[1]
-            .replace(/\+/g, '%20')
-        ) || null;
-    }
+	function getURLParameter ( name ) {
+		return decodeURIComponent(
+			( new RegExp( '[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)' ).exec( location.search ) || [ , '' ] )[ 1 ]
+			.replace( /\+/g, '%20' )
+		) || null;
+	}
 
-    var demoObj = {
-        subject    : [],
-        gradelevel : []
-    };
+	var demoObj = {
+		subject: [],
+		gradelevel: []
+	};
 
-    function fetchSelected ( paramObj ) {
-        if ( paramObj ) {
-            return JSON.parse( paramObj );
-        }
-        return [];
-    }
+	function fetchSelected ( paramObj ) {
+		if ( paramObj ) {
+			return JSON.parse( paramObj );
+		}
+		return [];
+	}
 
-    return function ( callback ) {
-        $.ajax({
-            url      : 'http://zubu.cloudapp.net:8888/subjects.json?ts=' + (new Date().getTime()),
-            type     : 'GET',
-            dataType : 'json',
-            success  : function(data) {
+	return function ( callback ) {
+		$.ajax( {
+			url: 'http://zubu.cloudapp.net:8888/subjects.json?ts=' + ( new Date().getTime() ),
+			type: 'GET',
+			dataType: 'json',
+			success: function ( data ) {
 
-                demoObj.subject = fetchSelected(getURLParameter('sub'));
-                demoObj.gradelevel = fetchSelected(getURLParameter('gra'));
+				demoObj.subject    = fetchSelected( getURLParameter( 'sub' ) );
+				demoObj.gradelevel = fetchSelected( getURLParameter( 'gra' ) );
 
-                // for (var i in demoObj.subject) {
-                //     demoObj.subject[i] = data.subjects[demoObj.subject[i]].toLowerCase();
-                // }
-                // for (var i in demoObj.gradelevel) {
-                //     demoObj.gradelevel[i] = data.grades[demoObj.gradelevel[i]].toLowerCase();
-                // }
+				demoObj.subject    = linq( demoObj.subject ).Select( function ( obj ) {
+					return data.subjects[ obj ];
+				} ).ToArray();
+				demoObj.gradelevel = linq( demoObj.gradelevel ).Select( function ( obj ) {
+					return data.grades[ obj ];
+				} ).ToArray();
 
-                demoObj.subject = linq(demoObj.subject).Select(function(obj){ return data.subjects[obj]; }).ToArray();
-                demoObj.gradelevel = linq(demoObj.gradelevel).Select(function(obj){ return data.grades[obj]; }).ToArray();
-
-                console.log(demoObj);
-
-                callback(demoObj);
-            },
-            error: function(err) {}
-        });
-    };
-});
+				callback( demoObj );
+			},
+			error: function ( err ) {}
+		} );
+	};
+} );
 /**
-    Recommendation Architecture
-    Author : Joseph Panuncillo
-    Last Date Modified : 1/22/14
+Recommendation Architecture
+Author : Joseph Panuncillo
+Last Date Modified : 1/22/14
 
-    @Description  Implementation of Recommendation Architecture
+@Description Implementation of Recommendation Architecture
 */
-define('utilities/videos/Recommend',['require','async','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/filters/subjectFilter','utilities/videos/filters/gradeFilter','utilities/videos/data/userFilterData'],function(require) {
-    'use strict';
+define( 'utilities/videos/Recommend',['require','async','utilities/videos/FilterData','utilities/videos/RecommendationSystem','utilities/videos/data/videoInfoSource','utilities/videos/filters/subjectFilter','utilities/videos/filters/gradeFilter','utilities/videos/data/userFilterData'],function ( require ) {
+	'use strict';
 
-    var async = require('async');
-    var filterData = require('utilities/videos/FilterData');
-    var recommendationSystem = require('utilities/videos/RecommendationSystem');
-    var sources = {
-        'videoInfo': require('utilities/videos/data/videoInfoSource')
-    };
+	var async                = require( 'async' );
+	var filterData           = require( 'utilities/videos/FilterData' );
+	var recommendationSystem = require( 'utilities/videos/RecommendationSystem' );
+	var sources              = {
+		'videoInfo' : require( 'utilities/videos/data/videoInfoSource' )
+	};
 
-    //register User Filter Data and Subject Filter logic to the system
-    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/subjectFilter'));
-    recommendationSystem.regRecommendationLogic(require('utilities/videos/filters/gradeFilter'));
+	//register User Filter Data and Subject Filter logic to the system
+	recommendationSystem.regRecommendationLogic( require( 'utilities/videos/filters/subjectFilter' ) );
+	recommendationSystem.regRecommendationLogic( require( 'utilities/videos/filters/gradeFilter' ) );
 
-    require('utilities/videos/data/userFilterData')(function(newFilterdata) {
-        filterData.regFilterDataObject('UserData', newFilterdata);
-    });
+	require( 'utilities/videos/data/userFilterData' ) ( function ( newFilterdata ) {
+		filterData.regFilterDataObject( 'UserData', newFilterdata );
+	} );
 
-    /**
-     * to facilitate fetching of both video data and filter data
-     * @param  object waterFallCallback mandatory async.waterfall parameter
-     */
+	/**
+	 * to facilitate fetching of both video data and filter data
+	 * @param object waterFallCallback mandatory async.waterfall parameter
+	 */
 
-    function fetchInputs(waterFallCallback) {
-        /**
-         * Since there is a big possibility that data are fetched asynchronously, functions for fetching data are wrapped in async.series
-         */
-        async.series([
-                /**
-                 * fetching video data/info
-                 */
-                function(seriesCallback) {
-                    videoInfo(seriesCallback);
-                },
-                /**
-                 * fetching filter data
-                 */
-                function(seriesCallback) {
-                    seriesCallback(null, {
-                        filterData: filterData.getFilterData()
-                    });
-                }
-            ],
-            /**
-             * video data and filter data are combined into one array - results
-             */
+	function fetchInputs ( waterFallCallback ) {
+		/**
+		 * Since there is a big possibility that data are fetched asynchronously, functions for fetching data are wrapped in async.series
+		 */
+		async.series( [
+				/**
+				 * fetching video data/info
+				 */
+				function ( seriesCallback ) {
+					videoInfo( seriesCallback );
+				},
+				/**
+				 * fetching filter data
+				 */
+				function ( seriesCallback ) {
+					seriesCallback( null, {
+						filterData : filterData.getFilterData()
+					} );
+				}
+			],
+			/**
+			 * video data and filter data are combined into one array - results
+			 */
 
-            function(err, results) {
-                waterFallCallback(null, results);
-            });
-    }
+			function ( err, results ) {
+				waterFallCallback( null, results );
+			} );
+	}
 
-    /**
-     * performs actual filtering of video data
-     * @param  object[] filter data and video data
-     * @param  object waterFallCallback mandatory async.waterfall parameter
-     */
+	/**
+	 * performs actual filtering of video data
+	 * @param object[] filter data and video data
+	 * @param object waterFallCallback mandatory async.waterfall parameter
+	 */
 
-    function recommedationSystem(inputData, waterFallCallback) {
-        recommendationSystem.setParameters(inputData[0], inputData[1]);
-        waterFallCallback(null, recommendationSystem.execute());
-    }
+	function recommedationSystem ( inputData, waterFallCallback ) {
+		recommendationSystem.setParameters( inputData[ 0 ], inputData[ 1 ] );
+		waterFallCallback( null, recommendationSystem.execute() );
+	}
 
-    /**
-     * since there is a big possibility that data accural and filter operations might be asychronous, function are wrapped in async.waterfall
-     */
+	/**
+	 * since there is a big possibility that data accural and filter operations might be asychronous, function are wrapped in async.waterfall
+	 */
 
-    function recommend(callback) {
-        async.waterfall([
-            /**
-             * performs data accural
-             * @param  object waterFallCallback mandatory async.waterfall parameter
-             */
-            function(waterFallCallback) {
-                fetchInputs(waterFallCallback);
-            },
-            /**
-             * performs filtering
-             * @param  object[] inputData results from data accural
-             * @param  object waterFallCallback mandatory async.waterfall parameter
-             */
-            function(inputData, waterFallCallback) {
-                recommedationSystem(inputData, waterFallCallback);
-            }
-        ], function(err, result) {
-            /**
-             * Contains final filtered output, will be modified when applied to the actual resource app to output the video data directly
-             */
-            callback(result.reserved ? result.reserved.concat(result.raw) : result.raw);
-        });
-    }
+	function recommend ( callback ) {
+		async.waterfall( [
+			/**
+			 * performs data accural
+			 * @param object waterFallCallback mandatory async.waterfall parameter
+			 */
+			function ( waterFallCallback ) {
+				fetchInputs( waterFallCallback );
+			},
+			/**
+			 * performs filtering
+			 * @param object[] inputData results from data accural
+			 * @param object waterFallCallback mandatory async.waterfall parameter
+			 */
+			function ( inputData, waterFallCallback ) {
+								recommedationSystem( inputData, waterFallCallback );
+						}
+				], function ( err, result ) {
+						/**
+						 * Contains final filtered output, will be modified when applied to the actual resource app to output the video data directly
+						 */
+						callback( result.reserved ? result.reserved.concat( result.raw ) : result.raw );
+				} );
+		}
 
-    /**
-     * function to be overriden to add the approriate video data
-     * @param  object seriesCallback mandatory async.series parameter
-     */
+		/**
+		 * function to be overriden to add the approriate video data
+		 * @param  object seriesCallback mandatory async.series parameter
+		 */
 
-    function videoInfo(seriesCallback) {
-        sources.videoInfo(function(data) {
-             seriesCallback(null, {
-                 videoData: {
-                     reserved: [],
-                     raw: data
-                 }
-             });
-        });
-    }
+		function videoInfo ( seriesCallback ) {
+				sources.videoInfo( function ( data ) {
+						seriesCallback( null, {
+								videoData : {
+										reserved : [],
+										raw      : data
+								}
+						} );
+				} );
+		}
 
 
-    return function(callback) {
-        recommend(function(result) {
-            callback(result);
-        });
+		return function ( callback ) {
+				recommend( function ( result ) {
+						callback( result );
+				} );
 
-    };
-});
+		};
+} );
 define( 'controllers/AppController',['require','underscore','jquery','backbone','marionette','async','collections/videos/VideoCollection','views/videos/VideosLayout','views/videos/VideosListView','views/videos/VideoItemView','views/ErrorView','utilities/videos/Recommend'],function ( require ) {
 	'use strict';
 
@@ -20144,13 +20143,13 @@ define( 'controllers/AppController',['require','underscore','jquery','backbone',
 		},
 
 		'showDefault' : function ( actions ) {
-			var _layout = this._setContent( layouts.VideosLayout );
+			var layout = this._setContent( layouts.VideosLayout );
 
-			util( function( data ) {
+			util( function ( data ) {
 				var collection = new collections.VideoCollection( data );
 				var videosView = new views.VideosListView( { 'collection' : collection } );
-				_layout.videos.show( videosView );
-			});
+				layout.videos.show( videosView );
+			} );
 		},
 
 
@@ -20239,10 +20238,10 @@ define( 'controllers/AppController',['require','underscore','jquery','backbone',
 
 } );
 define( 'Communicator',['require','backbone','marionette'],function ( require ) {
-    'use strict';
+	'use strict';
 
-    var Backbone   = require( 'backbone' );
-    var Marionette = require( 'marionette' );
+	var Backbone  = require( 'backbone' );
+	var Marionette = require( 'marionette' );
 
 	var Communicator = Marionette.Controller.extend( {
 		'initialize' : function () {
@@ -20251,10 +20250,10 @@ define( 'Communicator',['require','backbone','marionette'],function ( require ) 
 			this.mediator = new Backbone.Wreqr.EventAggregator();
 
 			//create a req/res
-			this.reqres   = new Backbone.Wreqr.RequestResponse();
+			this.reqres  = new Backbone.Wreqr.RequestResponse();
 
 			// create commands
-			this.command  = new Backbone.Wreqr.Commands();
+			this.command = new Backbone.Wreqr.Commands();
 		}
 	} );
 	return new Communicator();
@@ -20266,49 +20265,52 @@ define( 'App',['require','marionette','backbone','routers/AppRouter','controller
 	// ## Import statements
 
 	// Libs
-	var Marionette   = require( 'marionette' );
-	var Backbone     = require( 'backbone' );
+	var Marionette = require( 'marionette' );
+	var Backbone   = require( 'backbone' );
 
 	// App scripts
-	var Router       = require( 'routers/AppRouter' );
-	var Controller   = require( 'controllers/AppController' );
+	var Router     = require( 'routers/AppRouter' );
+	var Controller = require( 'controllers/AppController' );
 
 	// App event aggregator
 	var Communicator = require( 'Communicator' );
 
 	// App instantiation
-	var App          = new Marionette.Application();
+	var App = new Marionette.Application();
 
 	// ## Initializers
 
 	// The regions for the application
 	App.addRegions( {
-		'content'     : '#main-content',
+		'content' : '#main-content',
 	} );
 
 	App.addInitializer( function ( options ) {
 
 		// Controller init
 		App.Controller = new Controller( {
-			'App'     : App,
-			'regions' : {
-				'content'     : App.content
-			},
-			'Communicator' : Communicator
+			'App'          : App,
+			'Communicator' : Communicator,
+			'regions'      : {
+				'content' : App.content
+			}
 		} );
 
 		// Router init
-		App.Router = new Router( { 'controller' : App.Controller } );
+		App.Router = new Router( {
+			'controller': App.Controller
+		});
 	} );
 
 	// start history
-	App.on( 'initialize:after', function () {
-		Backbone.history.start( { 'pushState' : false } );
+	App.on('initialize:after', function() {
+		Backbone.history.start({
+			'pushState': false
+		} );
 	} );
 
 	return App;
 } );
-
 /*!
  * Modernizr v2.7.1
  * www.modernizr.com

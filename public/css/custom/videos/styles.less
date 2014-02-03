@@ -1,157 +1,146 @@
 //separate file for colors
 @import "styleColors.less";
-
 @max-percent : 100%;
 @min         : 0;
-
+@padd        : 1em;
 //wide resource container
 @wide-max-width : 1200px;
-
 //MARGIN and Paddings
-
 //resource list heading
 @res-heading : #20px;
-
 //resource list
 @res-lst-bottom : 50px;
-
 //video
 @vid-thumb-top-mar : 20px;
 @vid-thumb-top-par : 5px;
 @vid-thumb-left    : 25px;
-
 //list grid box
 @grid-bottom-right : 32px;
-
 //FONTS
 @font-common     : 300;
 @font-fam-common : 'Avenir LT W01 65 Medium', 'AvenirLTW01-65MediumObl', 'Avenir LT W01 85 Heavy', 'AvenirLTW01-85HeavyObli', 'Avenir', 'helvetica neue', helvetica, arial, sans-serif;
-
-
 //Video
-@vid-z-index: 1000;
-
+@vid-z-index : 1000;
 html {
-  overflow-x: hidden;
+	overflow-x : hidden;
 }
 body {
-  overflow-x  : hidden;
-  font-family : @font-fam-common;
-  font-size   : 15px;
-  color       : @purple-medium;
+	overflow-x  : hidden;
+	font-family : @font-fam-common;
+	font-size   : 15px;
+	color       : @purple-medium;
 }
 .wide-container {
-  margin    : @min auto;
-  max-width : @wide-max-width;
+	margin    : @min auto;
+	max-width : @wide-max-width;
 }
 .resource-list-heading {
-  height        : 30px;
-  margin-bottom : @res-heading;
-  width         : @max-percent;
+	height        : 30px;
+	margin-bottom : @res-heading;
+	width         : @max-percent;
 }
-
 //mixins for heading
 .heading-settings() {
-  font-weight : @font-common;
-  margin      : @min;
-  padding     : @min;
+	font-weight : @font-common;
+	margin      : @min;
+	padding     : @min;
 }
 h1 {
-  .heading-settings;
+	.heading-settings;
 }
 h2 {
-  .heading-settings;
-  font-size   : 24px;
-  line-height : 30px;
+	.heading-settings;
+	font-size   : 24px;
+	line-height : 30px;
 }
 h3 {
-  .heading-settings;
-  font-size   : 18px;
-  line-height : 24px;
+	.heading-settings;
+	font-size   : 18px;
+	line-height : 24px;
 }
 .resources {
-  h2 {
-    float : left;
-  }
-  ul {
-    margin-bottom : @res-lst-bottom;
-    min-height    : 300px;
-  }
+	h2 {
+		float : left;
+	}
+	ul {
+		margin-bottom : @res-lst-bottom;
+		min-height    : 300px;
+	}
 }
 .view-more {
-  float : right;
+	float : right;
 }
 .vid-thumb {
-  height   : 276px;
-  position : relative;
-  h3 {
-    margin : @vid-thumb-top-mar @min @min @vid-thumb-left;
-  }
-  p {
-    color  : @gray;
-    margin : @vid-thumb-top-par @min @min @vid-thumb-left;
-  }
+	height : 276px;
+	position : relative;
+	h3 {
+		margin : @vid-thumb-top-mar @min @min @vid-thumb-left;
+	}
+	p {
+		color  : @gray;
+		margin : @vid-thumb-top-par @min @min @vid-thumb-left;
+	}
 }
 a {
-  color           : @blue-light;
-  text-decoration : none;
+	color           : @blue-light;
+	text-decoration : none;
 }
 ul {
-  list-style-type : none;
-  margin          : @min;
-  padding         : @min;
+	list-style-type : none;
+	margin          : @min;
+	padding         : @min;
 }
 li.grid-box {
-  box-shadow    : @min 1px 1px rgba(32,37,35,0.2);
-  border-radius : 3px;
-  background    : none repeat scroll @min @min #f3f5f6;
-  float         : left;
-  margin        : @min @grid-bottom-right @grid-bottom-right @min;
-  width         : 276px;
+	box-shadow    : @min 1px 1px rgba(32, 37, 35, 0.2);
+	border-radius : 3px;
+	background    : none repeat scroll @min @min @white;
+	float         : left;
+	margin        : @min @grid-bottom-right @grid-bottom-right @min;
+	width         : 276px;
 }
 .login-form input, .blue-btn, .green-btn {
-  border-radius : 3px;
+	border-radius : 3px;
 }
 .play-now {
-  display  : none;
-  left     : 57px;
-  position : absolute;
-  top      : 73px;
-  z-index  : @vid-z-index;
+	display  : none;
+	left     : 57px;
+	position : absolute;
+	top      : 73px;
+	z-index  : @vid-z-index;
 }
 .watch-later {
-  display  : none;
-  position : absolute;
-  right    : 57px;
-  top      : 70px;
-  z-index  : @vid-z-index;
+	display  : none;
+	position : absolute;
+	right    : 57px;
+	top      : 70px;
+	z-index  : @vid-z-index;
 }
 .vid-thumb-bg {
-  border-top-left-radius  : 3px;
-  border-top-right-radius : 3px;
-  background              : none repeat scroll @min @min @black;
-  height                  : 180px;
-  overflow                : hidden;
-  width                   : 276px;
+	border-top-left-radius  : 3px;
+	border-top-right-radius : 3px;
+	background              : none repeat scroll @min @min @black;
+	height                  : 180px;
+	overflow                : hidden;
+	width                   : 276px;
 }
 p {
-  font-size   : 15px;
-  font-weight : normal;
-  line-height : 28px;
+	font-size   : 15px;
+	font-weight : normal;
+	line-height : 28px;
 }
 #peek {
-  width            : 200px;
-  float            : right;
-  position         : absolute;
-  left             : -205px;
-  background-color : @green-lime;
-  opacity          : .75;
-  padding          : 1em;
-  color            : @black-light;
-  font-family      : @font-fam-common;
-  font-weight      : @font-common;
-  z-index          : 100;
+	width            : 200px;
+	float            : right;
+	position         : absolute;
+	left             : -205px;
+	background-color : @green-lime;
+	opacity          : .75;
+	padding          : @padd;
+	color            : @black-light;
+	font-family      : @font-fam-common;
+	font-weight      : @font-common;
+	z-index          : 100;
 }
 .lLink {
-  text-decoration : none !important;
+	text-decoration : none !important;
 }

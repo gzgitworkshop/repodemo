@@ -1,5 +1,5 @@
 'use strict';
 
-module.exports = function ( grunt ) {
-	grunt.loadTasks( 'grunt' );
+module.exports = function(grunt) {
+    grunt.loadTasks('grunt');
 };
