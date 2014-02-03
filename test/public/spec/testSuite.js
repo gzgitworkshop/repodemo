@@ -9,7 +9,6 @@ define( function () {
 		'spec/views/videos/VideoItemViewTest.js',
 		'spec/views/videos/VideosLayoutTest.js',
 		'spec/views/videos/VideosListViewTest.js',
-		// 'spec/utilities/videos/RecommendTest.js',
 		'spec/utilities/videos/filters/gradeFilterTest.js',
 		'spec/utilities/videos/filters/subjectFilterTest.js'
 		 ]
